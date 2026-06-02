@@ -1,0 +1,7 @@
+# Naju Poultry - Robots
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /js/
+
+Sitemap: https://najupoultry.co.ke/sitemap.xml

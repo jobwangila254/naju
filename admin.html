@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Naju Poultry admin panel - manage products, delivery requests, and customer messages.">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Panel - Naju Poultry - Kwanza, Kenya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/supabase.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'naju-brown': '#8B4513',
+                        'naju-orange': '#F4A460',
+                        'naju-green': '#2E7D32',
+                        'naju-cream': '#FFF8E7'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-naju-cream">
+    <!-- Skip to content -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-naju-green focus:text-white focus:px-4 focus:py-2 focus:rounded focus:font-bold">
+        Skip to main content
+    </a>
+    <!-- Login Screen -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center">
+        <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+            <div class="text-center mb-8">
+                <div class="flex items-center justify-center mb-4">
+                    <i class="fas fa-egg text-naju-orange text-3xl mr-2"></i>
+                    <span class="font-bold text-2xl text-naju-brown">NAJU</span>
+                </div>
+                <h2 class="text-2xl font-bold text-naju-brown">Admin Login</h2>
+                <p class="text-gray-600">Enter your credentials to access the admin panel</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="mb-6">
+                    <label class="block text-naju-brown font-semibold mb-2">Email</label>
+                    <input type="text" id="username" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-naju-brown font-semibold mb-2">Password</label>
+                    <input type="password" id="password" required 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-naju-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </button>
+            </form>
+            
+            <div id="login-error" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                Invalid email or password
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-white shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 flex items-center">
+                            <i class="fas fa-egg text-naju-orange text-2xl mr-2"></i>
+                            <span class="font-bold text-xl text-naju-brown">NAJU Admin</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button onclick="showSection('dashboard', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Dashboard</button>
+                        <button onclick="showSection('products', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Products</button>
+                        <button onclick="showSection('delivery', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Delivery</button>
+                        <button onclick="showSection('messages', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Messages</button>
+                        <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="section py-8" tabindex="-1">
+            <div id="main-content">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold text-naju-brown mb-8">Dashboard Overview</h1>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-semibold text-gray-600">Total Products</h3>
+                            <i class="fas fa-box text-naju-green text-2xl"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-naju-brown" id="total-products">0</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-semibold text-gray-600">New Delivery Requests</h3>
+                            <i class="fas fa-truck text-naju-orange text-2xl"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-naju-brown" id="new-deliveries">0</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-semibold text-gray-600">New Messages</h3>
+                            <i class="fas fa-envelope text-naju-brown text-2xl"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-naju-brown" id="new-messages">0</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-lg font-semibold text-gray-600">Low Stock Items</h3>
+                            <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+                        </div>
+                        <p class="text-3xl font-bold text-naju-brown" id="low-stock">0</p>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">Recent Delivery Requests</h3>
+                        <div id="recent-deliveries" class="space-y-3">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">Recent Contact Messages</h3>
+                        <div id="recent-messages" class="space-y-3">
+                            <!-- Will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products-section" class="section hidden py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-naju-brown">Product Management</h1>
+                    <button onclick="showAddProductForm()" class="bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                        <i class="fas fa-plus mr-2"></i>Add Product
+                    </button>
+                </div>
+
+                <!-- Add Product Form -->
+                <div id="add-product-form" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold text-naju-brown mb-4">Add New Product</h3>
+                    <form id="new-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-naju-brown font-semibold mb-2">Product Name *</label>
+                            <input type="text" id="product-name" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-naju-brown font-semibold mb-2">Price *</label>
+                            <input type="number" id="product-price" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-naju-brown font-semibold mb-2">Category *</label>
+                            <select id="product-category" required 
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                                <option value="">Select category</option>
+                                <option value="eggs">Eggs</option>
+                                <option value="chicks">Chicks</option>
+                                <option value="live">Live Chicken</option>
+                                <option value="dressed">Dressed Chicken</option>
+                                <option value="feed">Feed</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-naju-brown font-semibold mb-2">Unit *</label>
+                            <input type="text" id="product-unit" placeholder="e.g., dozen, kg, bird" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-naju-brown font-semibold mb-2">Stock *</label>
+                            <input type="number" id="product-stock" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        <div>
+                            <label class="block text-naju-brown font-semibold mb-2">Image URL</label>
+                            <input type="url" id="product-image" 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-naju-brown font-semibold mb-2">Description</label>
+                            <textarea id="product-description" rows="3" 
+                                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent"></textarea>
+                        </div>
+                        <div class="md:col-span-2 flex gap-4">
+                            <button type="submit" class="bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                                <i class="fas fa-save mr-2"></i>Save Product
+                            </button>
+                            <button type="button" onclick="hideAddProductForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                                <i class="fas fa-times mr-2"></i>Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Products Table -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                    <table class="w-full min-w-[640px]">
+                        <thead class="bg-naju-brown text-white">
+                            <tr>
+                                <th class="px-6 py-3 text-left">Product Name</th>
+                                <th class="px-6 py-3 text-left">Category</th>
+                                <th class="px-6 py-3 text-left">Price</th>
+                                <th class="px-6 py-3 text-left">Stock</th>
+                                <th class="px-6 py-3 text-left">Status</th>
+                                <th class="px-6 py-3 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-table-body" class="divide-y divide-gray-200">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Delivery Requests Section -->
+        <section id="delivery-section" class="section hidden py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold text-naju-brown mb-8">Delivery Requests</h1>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                    <table class="w-full min-w-[700px]">
+                        <thead class="bg-naju-brown text-white">
+                            <tr>
+                                <th class="px-6 py-3 text-left">Customer Name</th>
+                                <th class="px-6 py-3 text-left">Phone</th>
+                                <th class="px-6 py-3 text-left">Address</th>
+                                <th class="px-6 py-3 text-left">Preferred Date</th>
+                                <th class="px-6 py-3 text-left">Product Interest</th>
+                                <th class="px-6 py-3 text-left">Status</th>
+                                <th class="px-6 py-3 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="delivery-table-body" class="divide-y divide-gray-200">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Messages Section -->
+        <section id="messages-section" class="section hidden py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold text-naju-brown mb-8">Contact Messages</h1>
+                
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                    <table class="w-full min-w-[700px]">
+                        <thead class="bg-naju-brown text-white">
+                            <tr>
+                                <th class="px-6 py-3 text-left">Name</th>
+                                <th class="px-6 py-3 text-left">Email</th>
+                                <th class="px-6 py-3 text-left">Phone</th>
+                                <th class="px-6 py-3 text-left">Message</th>
+                                <th class="px-6 py-3 text-left">Date</th>
+                                <th class="px-6 py-3 text-left">Status</th>
+                                <th class="px-6 py-3 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="messages-table-body" class="divide-y divide-gray-200">
+                            <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Supabase Configuration -->
+    <script>
+        // Supabase initialization
+        let sb = null;
+        try {
+            sb = initSupabase();
+        } catch (error) {
+            console.error('Naju Poultry Admin: Supabase initialization failed:', error);
+        }
+
+        // Check if already logged in via session
+        window.onload = function() {
+            const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
+            if (isLoggedIn === 'true') {
+                showDashboard();
+            }
+        };
+
+        // Login form submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                if (sb) {
+                    const { data, error } = await sb.auth.signInWithPassword({
+                        email: email,
+                        password: password
+                    });
+                    
+                    if (error) throw error;
+                    
+                    if (data.user) {
+                        sessionStorage.setItem('adminLoggedIn', 'true');
+                        showDashboard();
+                    }
+                } else {
+                    throw new Error('Supabase not initialized');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                document.getElementById('login-error').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('login-error').classList.add('hidden');
+                }, 3000);
+            }
+        });
+
+        // Show dashboard
+        function showDashboard() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            loadDashboardData();
+        }
+
+        // Logout
+        async function logout() {
+            if (sb) {
+                await sb.auth.signOut();
+            }
+            sessionStorage.removeItem('adminLoggedIn');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('login-form').reset();
+        }
+
+        // Show section
+        function showSection(section, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(section + '-section').classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('text-naju-orange');
+                b.classList.add('text-naju-brown');
+            });
+            if (btn) {
+                btn.classList.remove('text-naju-brown');
+                btn.classList.add('text-naju-orange');
+            }
+            if (section === 'dashboard') {
+                loadDashboardData();
+            } else if (section === 'products') {
+                loadProducts();
+            } else if (section === 'delivery') {
+                loadDeliveryRequests();
+            } else if (section === 'messages') {
+                loadContactMessages();
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                if (!sb) return;
+
+                const [{ count: totalProducts }, { count: newDeliveries }, { count: newMessages }, { data: products }] = await Promise.all([
+                    sb.from('products').select('*', { count: 'exact', head: true }),
+                    sb.from('delivery_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+                    sb.from('contact_messages').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+                    sb.from('products').select('stock')
+                ]);
+
+                document.getElementById('total-products').textContent = totalProducts || 0;
+                document.getElementById('new-deliveries').textContent = newDeliveries || 0;
+                document.getElementById('new-messages').textContent = newMessages || 0;
+                document.getElementById('low-stock').textContent = (products || []).filter(p => p.stock < 20).length;
+
+                const { data: recentDeliveries } = await sb
+                    .from('delivery_requests')
+                    .select('customer_name, address, preferred_date')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+
+                document.getElementById('recent-deliveries').innerHTML = (recentDeliveries || []).map(d => `
+                    <div class="p-3 bg-gray-50 rounded">
+                        <p class="font-semibold">${d.customer_name}</p>
+                        <p class="text-sm text-gray-600">${d.address}</p>
+                        <p class="text-xs text-naju-green">${d.preferred_date}</p>
+                    </div>
+                `).join('') || '<p class="text-gray-500">No recent deliveries</p>';
+
+                const { data: recentMessages } = await sb
+                    .from('contact_messages')
+                    .select('name, message, created_at')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+
+                document.getElementById('recent-messages').innerHTML = (recentMessages || []).map(m => `
+                    <div class="p-3 bg-gray-50 rounded">
+                        <p class="font-semibold">${m.name}</p>
+                        <p class="text-sm text-gray-600">${(m.message || '').substring(0, 50)}...</p>
+                        <p class="text-xs text-naju-green">${new Date(m.created_at).toLocaleDateString()}</p>
+                    </div>
+                `).join('') || '<p class="text-gray-500">No recent messages</p>';
+
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+            }
+        }
+
+        async function loadProducts() {
+            try {
+                if (!sb) return;
+                const { data: products, error } = await sb.from('products').select('*');
+                if (error) throw error;
+
+                document.getElementById('products-table-body').innerHTML = (products || []).map(p => {
+                    const stockStatus = p.stock > 20 ? 'In Stock' : p.stock > 0 ? 'Limited' : 'Out of Stock';
+                    const stockColor = p.stock > 20 ? 'text-green-600' : p.stock > 0 ? 'text-orange-600' : 'text-red-600';
+                    return `
+                        <tr>
+                            <td class="px-6 py-4">${p.name}</td>
+                            <td class="px-6 py-4">${p.category}</td>
+                            <td class="px-6 py-4">KSh${Number(p.price).toLocaleString()}/${p.unit}</td>
+                            <td class="px-6 py-4">${p.stock}</td>
+                            <td class="px-6 py-4"><span class="${stockColor}">${stockStatus}</span></td>
+                            <td class="px-6 py-4">
+                                <button onclick="editProduct('${p.id}')" class="text-naju-green hover:text-green-700 mr-3">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button onclick="deleteProduct('${p.id}')" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('') || '<tr><td colspan="6" class="text-center py-4">No products found</td></tr>';
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        async function loadDeliveryRequests() {
+            try {
+                if (!sb) return;
+                const { data: deliveries, error } = await sb
+                    .from('delivery_requests')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (error) throw error;
+
+                document.getElementById('delivery-table-body').innerHTML = (deliveries || []).map(d => {
+                    const statusColor = d.status === 'pending' ? 'text-orange-600' : 
+                                       d.status === 'contacted' ? 'text-blue-600' :
+                                       d.status === 'delivered' ? 'text-green-600' : 'text-red-600';
+                    return `
+                        <tr>
+                            <td class="px-6 py-4">${d.customer_name}</td>
+                            <td class="px-6 py-4">${d.phone}</td>
+                            <td class="px-6 py-4">${d.address}</td>
+                            <td class="px-6 py-4">${d.preferred_date}</td>
+                            <td class="px-6 py-4">${d.product_interest}</td>
+                            <td class="px-6 py-4">
+                                <select onchange="updateDeliveryStatus('${d.id}', this.value)" class="${statusColor} font-semibold">
+                                    <option value="pending" ${d.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="contacted" ${d.status === 'contacted' ? 'selected' : ''}>Contacted</option>
+                                    <option value="delivered" ${d.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                    <option value="cancelled" ${d.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                                </select>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button onclick="deleteDelivery('${d.id}')" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('') || '<tr><td colspan="7" class="text-center py-4">No delivery requests found</td></tr>';
+            } catch (error) {
+                console.error('Error loading delivery requests:', error);
+            }
+        }
+
+        async function loadContactMessages() {
+            try {
+                if (!sb) return;
+                const { data: messages, error } = await sb
+                    .from('contact_messages')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (error) throw error;
+
+                document.getElementById('messages-table-body').innerHTML = (messages || []).map(m => {
+                    const statusColor = m.status === 'new' ? 'text-orange-600' : 'text-gray-600';
+                    return `
+                        <tr>
+                            <td class="px-6 py-4">${m.name}</td>
+                            <td class="px-6 py-4">${m.email}</td>
+                            <td class="px-6 py-4">${m.phone || ''}</td>
+                            <td class="px-6 py-4">${(m.message || '').substring(0, 100)}...</td>
+                            <td class="px-6 py-4">${new Date(m.created_at).toLocaleDateString()}</td>
+                            <td class="px-6 py-4">
+                                <select onchange="updateMessageStatus('${m.id}', this.value)" class="${statusColor} font-semibold">
+                                    <option value="new" ${m.status === 'new' ? 'selected' : ''}>New</option>
+                                    <option value="read" ${m.status === 'read' ? 'selected' : ''}>Read</option>
+                                </select>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button onclick="deleteMessage('${m.id}')" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('') || '<tr><td colspan="7" class="text-center py-4">No messages found</td></tr>';
+            } catch (error) {
+                console.error('Error loading contact messages:', error);
+            }
+        }
+
+        function showAddProductForm() {
+            document.getElementById('add-product-form').classList.remove('hidden');
+        }
+
+        function hideAddProductForm() {
+            document.getElementById('add-product-form').classList.add('hidden');
+            document.getElementById('new-product-form').reset();
+        }
+
+        document.getElementById('new-product-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!sb) return;
+
+            const productData = {
+                name: document.getElementById('product-name').value,
+                price: parseInt(document.getElementById('product-price').value),
+                category: document.getElementById('product-category').value,
+                unit: document.getElementById('product-unit').value,
+                stock: parseInt(document.getElementById('product-stock').value),
+                image_url: document.getElementById('product-image').value || '',
+                description: document.getElementById('product-description').value || ''
+            };
+
+            try {
+                const { error } = await sb.from('products').insert(productData);
+                if (error) throw error;
+                hideAddProductForm();
+                loadProducts();
+                alert('Product added successfully!');
+            } catch (error) {
+                console.error('Error adding product:', error);
+                alert('Error adding product. Please try again.');
+            }
+        });
+
+        async function updateDeliveryStatus(id, status) {
+            if (!sb) return;
+            try {
+                await sb.from('delivery_requests').update({ status }).eq('id', id);
+                loadDeliveryRequests();
+            } catch (error) {
+                console.error('Error updating delivery status:', error);
+            }
+        }
+
+        async function updateMessageStatus(id, status) {
+            if (!sb) return;
+            try {
+                await sb.from('contact_messages').update({ status }).eq('id', id);
+                loadContactMessages();
+            } catch (error) {
+                console.error('Error updating message status:', error);
+            }
+        }
+
+        async function deleteProduct(id) {
+            if (!sb) return;
+            if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                    await sb.from('products').delete().eq('id', id);
+                    loadProducts();
+                } catch (error) {
+                    console.error('Error deleting product:', error);
+                }
+            }
+        }
+
+        async function deleteDelivery(id) {
+            if (!sb) return;
+            if (confirm('Are you sure you want to delete this delivery request?')) {
+                try {
+                    await sb.from('delivery_requests').delete().eq('id', id);
+                    loadDeliveryRequests();
+                } catch (error) {
+                    console.error('Error deleting delivery request:', error);
+                }
+            }
+        }
+
+        async function deleteMessage(id) {
+            if (!sb) return;
+            if (confirm('Are you sure you want to delete this message?')) {
+                try {
+                    await sb.from('contact_messages').delete().eq('id', id);
+                    loadContactMessages();
+                } catch (error) {
+                    console.error('Error deleting message:', error);
+                }
+            }
+        }
+
+        function editProduct(id) {
+            alert('Edit functionality: please delete and recreate the product for now.');
+        }
+    </script>
+</body>
+</html>
