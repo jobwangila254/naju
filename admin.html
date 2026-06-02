@@ -429,20 +429,20 @@
                 document.getElementById('low-stock').textContent = (products || []).filter(p => p.stock < 20).length;
 
                 let recentDeliveries;
-                try {
-                    const r = await sb
-                        .from('delivery_requests')
-                        .select('customer_name, address, preferred_date, location_link')
-                        .order('created_at', { ascending: false })
-                        .limit(5);
-                    recentDeliveries = r.data;
-                } catch (_) {
-                    const r = await sb
+                const rd = await sb
+                    .from('delivery_requests')
+                    .select('customer_name, address, preferred_date, location_link')
+                    .order('created_at', { ascending: false })
+                    .limit(5);
+                if (rd.error) {
+                    const rd2 = await sb
                         .from('delivery_requests')
                         .select('customer_name, address, preferred_date')
                         .order('created_at', { ascending: false })
                         .limit(5);
-                    recentDeliveries = r.data;
+                    recentDeliveries = rd2.data;
+                } else {
+                    recentDeliveries = rd.data;
                 }
 
                 document.getElementById('recent-deliveries').innerHTML = (recentDeliveries || []).map(d => `
