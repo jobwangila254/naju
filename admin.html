@@ -409,7 +409,7 @@
 
                 const { data: recentDeliveries } = await sb
                     .from('delivery_requests')
-                    .select('customer_name, address, preferred_date')
+                    .select('customer_name, address, preferred_date, location_link')
                     .order('created_at', { ascending: false })
                     .limit(5);
 
@@ -417,7 +417,10 @@
                     <div class="p-3 bg-gray-50 rounded">
                         <p class="font-semibold">${d.customer_name}</p>
                         <p class="text-sm text-gray-600">${d.address}</p>
-                        <p class="text-xs text-naju-green">${d.preferred_date}</p>
+                        <div class="flex items-center gap-2 mt-1">
+                            ${d.location_link ? `<a href="${d.location_link}" target="_blank" class="text-xs text-naju-green hover:text-green-700"><i class="fas fa-map-marker-alt mr-1"></i>View Map</a>` : ''}
+                            <p class="text-xs text-naju-green">${d.preferred_date}</p>
+                        </div>
                     </div>
                 `).join('') || '<p class="text-gray-500">No recent deliveries</p>';
 
@@ -490,7 +493,7 @@
                             <td class="px-6 py-4">${d.customer_name}</td>
                             <td class="px-6 py-4">${d.phone}</td>
                             <td class="px-6 py-4 max-w-[200px] truncate">${d.address}</td>
-                            <td class="px-6 py-4">${d.location_link ? `<a href="${d.location_link}" target="_blank" class="text-naju-green hover:text-green-700 font-semibold flex items-center"><i class="fas fa-map-marker-alt mr-1"></i>View Map</a>` : '<span class="text-gray-400">—</span>'}</td>
+                            <td class="px-6 py-4">${d.location_link ? `<div class="flex flex-col gap-1"><a href="${d.location_link}" target="_blank" class="text-naju-green hover:text-green-700 font-semibold flex items-center"><i class="fas fa-map-marker-alt mr-1"></i>View Map</a><button onclick="copyLocation('${d.location_link}', this)" class="text-xs text-gray-500 hover:text-naju-brown flex items-center"><i class="fas fa-copy mr-1"></i>Copy Link</button></div>` : '<span class="text-gray-400">—</span>'}</td>
                             <td class="px-6 py-4">${d.preferred_date}</td>
                             <td class="px-6 py-4">${d.product_interest}</td>
                             <td class="px-6 py-4">
@@ -644,6 +647,17 @@
 
         function editProduct(id) {
             alert('Edit functionality: please delete and recreate the product for now.');
+        }
+
+        // Copy location link to clipboard for sharing with delivery guy
+        function copyLocation(url, btn) {
+            navigator.clipboard.writeText(url).then(() => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
+                setTimeout(() => btn.innerHTML = original, 2000);
+            }).catch(() => {
+                prompt('Copy this link to share with the delivery guy:', url);
+            });
         }
     </script>
 </body>
