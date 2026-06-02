@@ -29,7 +29,9 @@ CREATE TABLE delivery_requests (
     latitude TEXT DEFAULT '',
     longitude TEXT DEFAULT '',
     location_link TEXT DEFAULT '',
-    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'contacted', 'delivered', 'cancelled')),
+    payment_method TEXT DEFAULT 'cash' CHECK (payment_method IN ('cash', 'mpesa')),
+    mpesa_code TEXT DEFAULT '',
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'contacted', 'confirmed', 'out_for_delivery', 'delivered', 'cancelled')),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -121,3 +123,20 @@ CREATE INDEX idx_delivery_requests_status ON delivery_requests(status);
 CREATE INDEX idx_contact_messages_status ON contact_messages(status);
 CREATE INDEX idx_delivery_requests_created_at ON delivery_requests(created_at DESC);
 CREATE INDEX idx_contact_messages_created_at ON contact_messages(created_at DESC);
+
+-- Storage bucket for product images
+-- Run this in Supabase SQL Editor to create the bucket:
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('product-images', 'product-images', true);
+-- 
+-- Then set RLS to allow authenticated uploads:
+-- CREATE POLICY "Public product images"
+--     ON storage.objects FOR SELECT
+--     USING (bucket_id = 'product-images');
+-- 
+-- CREATE POLICY "Admin can upload product images"
+--     ON storage.objects FOR INSERT
+--     WITH CHECK (bucket_id = 'product-images' AND auth.role() = 'authenticated');
+-- 
+-- CREATE POLICY "Admin can delete product images"
+--     ON storage.objects FOR DELETE
+--     USING (bucket_id = 'product-images' AND auth.role() = 'authenticated');

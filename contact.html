@@ -40,6 +40,10 @@
                     <a href="delivery.html" class="text-naju-brown hover:text-naju-orange font-medium">Delivery</a>
                     <a href="about.html" class="text-naju-brown hover:text-naju-orange font-medium">About</a>
                     <a href="contact.html" class="text-naju-orange font-medium">Contact</a>
+                    <a href="track.html" class="text-naju-brown hover:text-naju-orange font-medium">Track</a>
+                    <button id="dark-toggle" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 text-lg ml-2" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-button" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-naju-orange focus:ring-offset-2 rounded-lg p-2" aria-label="Toggle mobile menu" aria-expanded="false">
@@ -56,6 +60,10 @@
                 <a href="delivery.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Delivery</a>
                 <a href="about.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">About</a>
                 <a href="contact.html" class="block px-3 py-2 text-naju-orange font-medium">Contact</a>
+                <a href="track.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Track</a>
+                <button id="dark-toggle-mobile" class="w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange font-medium flex items-center gap-2">
+                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -288,6 +296,7 @@
                         <li><a href="delivery.html" class="text-naju-cream hover:text-white">Delivery</a></li>
                         <li><a href="about.html" class="text-naju-cream hover:text-white">About Us</a></li>
                         <li><a href="contact.html" class="text-naju-cream hover:text-white">Contact</a></li>
+                        <li><a href="track.html" class="text-naju-cream hover:text-white">Track Order</a></li>
                     </ul>
                 </div>
                 <div>
@@ -390,6 +399,34 @@
                 document.getElementById('success-message').classList.add('hidden');
             }
         });
+
+        // Dark Mode Toggle
+        (function() {
+            const html = document.documentElement;
+            const stored = localStorage.getItem('naju_dark');
+            if (stored === 'true') html.classList.add('dark');
+
+            function setIcon(icon) {
+                document.querySelectorAll('#dark-toggle i, #dark-toggle-mobile i').forEach(el => {
+                    el.className = 'fas ' + (icon === 'moon' ? 'fa-moon' : 'fa-sun');
+                });
+                document.querySelectorAll('#dark-toggle-mobile span').forEach(el => {
+                    el.textContent = icon === 'moon' ? 'Dark Mode' : 'Light Mode';
+                });
+            }
+
+            function toggle() {
+                const isDark = html.classList.toggle('dark');
+                localStorage.setItem('naju_dark', isDark);
+                setIcon(isDark ? 'sun' : 'moon');
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                setIcon(html.classList.contains('dark') ? 'sun' : 'moon');
+                const btns = document.querySelectorAll('#dark-toggle, #dark-toggle-mobile');
+                btns.forEach(btn => btn.addEventListener('click', toggle));
+            });
+        })();
     </script>
 </body>
 </html>

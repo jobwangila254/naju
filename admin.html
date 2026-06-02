@@ -163,7 +163,7 @@
 
                 <!-- Add Product Form -->
                 <div id="add-product-form" class="hidden bg-white rounded-lg shadow-lg p-6 mb-8">
-                    <h3 class="text-xl font-bold text-naju-brown mb-4">Add New Product</h3>
+                    <h3 id="form-title" class="text-xl font-bold text-naju-brown mb-4">Add New Product</h3>
                     <form id="new-product-form" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-naju-brown font-semibold mb-2">Product Name *</label>
@@ -198,9 +198,22 @@
                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
                         </div>
                         <div>
-                            <label class="block text-naju-brown font-semibold mb-2">Image URL</label>
-                            <input type="url" id="product-image" 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                            <label class="block text-naju-brown font-semibold mb-2">Product Image</label>
+                            <div class="flex items-center gap-3">
+                                <label class="cursor-pointer bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg px-4 py-2 transition-colors">
+                                    <i class="fas fa-upload mr-2"></i>Choose File
+                                    <input type="file" id="product-image-input" accept="image/*" class="hidden" onchange="previewImage(this)">
+                                </label>
+                                <span id="image-file-name" class="text-sm text-gray-500">No file chosen</span>
+                            </div>
+                            <div id="image-preview" class="hidden mt-2">
+                                <img id="image-preview-img" src="" alt="Preview" class="w-24 h-24 object-cover rounded-lg border">
+                                <button type="button" onclick="removeImage()" class="text-xs text-red-500 hover:text-red-700 mt-1">
+                                    <i class="fas fa-times mr-1"></i>Remove
+                                </button>
+                            </div>
+                            <input type="hidden" id="product-image" value="">
+                            <input type="hidden" id="product-image-file" value="">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-naju-brown font-semibold mb-2">Description</label>
@@ -208,7 +221,7 @@
                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent"></textarea>
                         </div>
                         <div class="md:col-span-2 flex gap-4">
-                            <button type="submit" class="bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                            <button type="submit" id="form-submit-btn" class="bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
                                 <i class="fas fa-save mr-2"></i>Save Product
                             </button>
                             <button type="button" onclick="hideAddProductForm()" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
@@ -248,7 +261,7 @@
                 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="overflow-x-auto">
-                    <table class="w-full min-w-[800px]">
+                    <table class="w-full min-w-[900px]">
                         <thead class="bg-naju-brown text-white">
                             <tr>
                                 <th class="px-6 py-3 text-left">Customer Name</th>
@@ -257,6 +270,7 @@
                                 <th class="px-6 py-3 text-left">Location</th>
                                 <th class="px-6 py-3 text-left">Preferred Date</th>
                                 <th class="px-6 py-3 text-left">Product Interest</th>
+                                <th class="px-6 py-3 text-left">Payment</th>
                                 <th class="px-6 py-3 text-left">Status</th>
                                 <th class="px-6 py-3 text-left">Actions</th>
                             </tr>
@@ -303,6 +317,7 @@
     <script>
         // Supabase initialization
         let sb = null;
+        let editingProductId = null;
         try {
             sb = initSupabase();
         } catch (error) {
@@ -519,7 +534,13 @@
                 document.getElementById('delivery-table-body').innerHTML = (deliveries || []).map(d => {
                     const statusColor = d.status === 'pending' ? 'text-orange-600' : 
                                        d.status === 'contacted' ? 'text-blue-600' :
+                                       d.status === 'confirmed' ? 'text-indigo-600' :
+                                       d.status === 'out_for_delivery' ? 'text-orange-600' :
                                        d.status === 'delivered' ? 'text-green-600' : 'text-red-600';
+                    const paymentMethod = d.payment_method === 'mpesa' ? 'M-Pesa' : d.payment_method === 'cash' ? 'Cash' : '—';
+                    const paymentHtml = d.payment_method === 'mpesa'
+                        ? `<span class="text-green-600 font-semibold">M-Pesa</span>${d.mpesa_code ? `<br><span class="text-xs text-gray-500">Code: ${d.mpesa_code}</span>` : '<br><span class="text-xs text-orange-500">Pending payment</span>'}`
+                        : `<span class="text-gray-600">${paymentMethod}</span>`;
                     return `
                         <tr>
                             <td class="px-6 py-4">${d.customer_name}</td>
@@ -528,10 +549,13 @@
                             <td class="px-6 py-4">${d.location_link ? `<div class="flex flex-col gap-1"><a href="${d.location_link}" target="_blank" class="text-naju-green hover:text-green-700 font-semibold flex items-center"><i class="fas fa-map-marker-alt mr-1"></i>View Map</a><button onclick="copyLocation('${d.location_link}', this)" class="text-xs text-gray-500 hover:text-naju-brown flex items-center"><i class="fas fa-copy mr-1"></i>Copy Link</button></div>` : '<span class="text-gray-400">—</span>'}</td>
                             <td class="px-6 py-4">${d.preferred_date}</td>
                             <td class="px-6 py-4">${d.product_interest}</td>
+                            <td class="px-6 py-4">${paymentHtml}</td>
                             <td class="px-6 py-4">
                                 <select onchange="updateDeliveryStatus('${d.id}', this.value)" class="${statusColor} font-semibold">
                                     <option value="pending" ${d.status === 'pending' ? 'selected' : ''}>Pending</option>
                                     <option value="contacted" ${d.status === 'contacted' ? 'selected' : ''}>Contacted</option>
+                                    <option value="confirmed" ${d.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                    <option value="out_for_delivery" ${d.status === 'out_for_delivery' ? 'selected' : ''}>Out for Delivery</option>
                                     <option value="delivered" ${d.status === 'delivered' ? 'selected' : ''}>Delivered</option>
                                     <option value="cancelled" ${d.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
                                 </select>
@@ -543,7 +567,7 @@
                             </td>
                         </tr>
                     `;
-                }).join('') || '<tr><td colspan="8" class="text-center py-4">No delivery requests found</td></tr>';
+                }).join('') || '<tr><td colspan="9" class="text-center py-4">No delivery requests found</td></tr>';
             } catch (error) {
                 console.error('Error loading delivery requests:', error);
             }
@@ -586,38 +610,122 @@
             }
         }
 
-        function showAddProductForm() {
+        function previewImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+            document.getElementById('image-file-name').textContent = file.name;
+            document.getElementById('product-image-file').value = file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('image-preview');
+                const img = document.getElementById('image-preview-img');
+                img.src = e.target.result;
+                preview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            document.getElementById('product-image-input').value = '';
+            document.getElementById('product-image-file').value = '';
+            document.getElementById('product-image').value = '';
+            document.getElementById('image-file-name').textContent = 'No file chosen';
+            document.getElementById('image-preview').classList.add('hidden');
+        }
+
+        async function uploadProductImage(file) {
+            const ext = file.name.split('.').pop();
+            const fileName = `product_${Date.now()}.${ext}`;
+            const { data, error } = await sb.storage.from('product-images').upload(fileName, file);
+            if (error) throw error;
+            const { data: { publicUrl } } = sb.storage.from('product-images').getPublicUrl(fileName);
+            return publicUrl;
+        }
+
+        function showAddProductForm(product) {
+            editingProductId = null;
+            document.getElementById('new-product-form').reset();
+            removeImage();
+            document.getElementById('form-title').textContent = 'Add New Product';
+            document.getElementById('form-submit-btn').innerHTML = '<i class="fas fa-save mr-2"></i>Save Product';
+            if (product) {
+                editingProductId = product.id;
+                document.getElementById('product-name').value = product.name;
+                document.getElementById('product-price').value = product.price;
+                document.getElementById('product-category').value = product.category;
+                document.getElementById('product-unit').value = product.unit;
+                document.getElementById('product-stock').value = product.stock;
+                document.getElementById('product-description').value = product.description || '';
+                if (product.image_url) {
+                    document.getElementById('product-image').value = product.image_url;
+                    document.getElementById('image-preview-img').src = product.image_url;
+                    document.getElementById('image-preview').classList.remove('hidden');
+                    document.getElementById('image-file-name').textContent = 'Current image';
+                }
+                document.getElementById('form-title').textContent = 'Edit Product';
+                document.getElementById('form-submit-btn').innerHTML = '<i class="fas fa-pen mr-2"></i>Update Product';
+            }
             document.getElementById('add-product-form').classList.remove('hidden');
         }
 
         function hideAddProductForm() {
             document.getElementById('add-product-form').classList.add('hidden');
             document.getElementById('new-product-form').reset();
+            removeImage();
+            editingProductId = null;
         }
 
         document.getElementById('new-product-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             if (!sb) return;
 
-            const productData = {
-                name: document.getElementById('product-name').value,
-                price: parseInt(document.getElementById('product-price').value),
-                category: document.getElementById('product-category').value,
-                unit: document.getElementById('product-unit').value,
-                stock: parseInt(document.getElementById('product-stock').value),
-                image_url: document.getElementById('product-image').value || '',
-                description: document.getElementById('product-description').value || ''
-            };
+            const submitBtn = document.getElementById('form-submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
 
             try {
-                const { error } = await sb.from('products').insert(productData);
-                if (error) throw error;
-                hideAddProductForm();
-                loadProducts();
-                alert('Product added successfully!');
+                let imageUrl = document.getElementById('product-image').value || '';
+
+                const fileInput = document.getElementById('product-image-input');
+                if (fileInput.files.length > 0) {
+                    try {
+                        imageUrl = await uploadProductImage(fileInput.files[0]);
+                    } catch (uploadError) {
+                        console.warn('Image upload failed, saving without image:', uploadError);
+                    }
+                }
+
+                const productData = {
+                    name: document.getElementById('product-name').value,
+                    price: parseInt(document.getElementById('product-price').value),
+                    category: document.getElementById('product-category').value,
+                    unit: document.getElementById('product-unit').value,
+                    stock: parseInt(document.getElementById('product-stock').value),
+                    image_url: imageUrl,
+                    description: document.getElementById('product-description').value || ''
+                };
+
+                if (editingProductId) {
+                    const { error } = await sb.from('products').update(productData).eq('id', editingProductId);
+                    if (error) throw error;
+                    hideAddProductForm();
+                    loadProducts();
+                    alert('Product updated successfully!');
+                } else {
+                    const { error } = await sb.from('products').insert(productData);
+                    if (error) throw error;
+                    hideAddProductForm();
+                    loadProducts();
+                    alert('Product added successfully!');
+                }
             } catch (error) {
-                console.error('Error adding product:', error);
-                alert('Error adding product. Please try again.');
+                console.error('Error saving product:', error);
+                alert('Error saving product. Please try again.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = editingProductId
+                    ? '<i class="fas fa-pen mr-2"></i>Update Product'
+                    : '<i class="fas fa-save mr-2"></i>Save Product';
             }
         });
 
@@ -677,8 +785,16 @@
             }
         }
 
-        function editProduct(id) {
-            alert('Edit functionality: please delete and recreate the product for now.');
+        async function editProduct(id) {
+            if (!sb) return;
+            try {
+                const { data, error } = await sb.from('products').select('*').eq('id', id).single();
+                if (error) throw error;
+                showAddProductForm(data);
+            } catch (error) {
+                console.error('Error fetching product:', error);
+                alert('Error loading product data.');
+            }
         }
 
         // Copy location link to clipboard for sharing with delivery guy

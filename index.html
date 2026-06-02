@@ -126,6 +126,13 @@
                         Contact
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
                     </a>
+                    <a href="track.html" class="text-naju-brown hover:text-naju-orange font-medium transition-all duration-300 hover:scale-105 relative group">
+                        Track
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <button id="dark-toggle" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 text-lg ml-2" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-button" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-naju-orange focus:ring-offset-2 rounded-lg p-2" aria-label="Toggle mobile menu" aria-expanded="false">
@@ -142,6 +149,10 @@
                 <a href="delivery.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Delivery</a>
                 <a href="about.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">About</a>
                 <a href="contact.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Contact</a>
+                <a href="track.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Track</a>
+                <button id="dark-toggle-mobile" class="w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -426,6 +437,7 @@
                         <li><a href="delivery.html" class="text-naju-cream hover:text-white transition-colors duration-300">Delivery</a></li>
                         <li><a href="about.html" class="text-naju-cream hover:text-white transition-colors duration-300">About Us</a></li>
                         <li><a href="contact.html" class="text-naju-cream hover:text-white transition-colors duration-300">Contact</a></li>
+                        <li><a href="track.html" class="text-naju-cream hover:text-white transition-colors duration-300">Track Order</a></li>
                     </ul>
                 </div>
                 <div class="animate-fade-in" style="animation-delay: 0.2s">
@@ -642,12 +654,19 @@
         function createProductCard(product) {
             const stockStatus = product.stock > 20 ? 'In Stock' : 'Limited';
             const stockColor = product.stock > 20 ? 'text-green-600' : 'text-orange-600';
-            const productImage = product.image || '🥚';
+            const imgSrc = product.image_url || product.image || '';
+            const isEmoji = imgSrc && imgSrc.length <= 2;
+            const cartItem = getCartItem(product.id);
+            const qty = cartItem ? cartItem.quantity : 0;
+            
+            const imageHtml = isEmoji
+                ? `<span class="text-6xl animate-float">${imgSrc || '🥚'}</span>`
+                : `<img src="${imgSrc}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="text-6xl animate-float hidden">🥚</span>`;
             
             return `
                 <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group">
                     <div class="h-48 bg-gradient-to-br from-naju-cream to-naju-orange flex items-center justify-center relative overflow-hidden">
-                        <span class="text-6xl animate-float">${productImage}</span>
+                        ${imageHtml}
                         <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
                     </div>
                     <div class="p-4">
@@ -657,12 +676,17 @@
                             <span class="w-2 h-2 ${stockColor.replace('text', 'bg')} rounded-full mr-2"></span>
                             ${stockStatus}
                         </p>
-                        <a href="https://wa.me/254724442020?text=Hello%20Naju,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" 
-                           target="_blank" 
-                           class="w-full bg-naju-orange hover:bg-orange-500 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105 group relative overflow-hidden">
-                            <span class="relative z-10"><i class="fab fa-whatsapp mr-2"></i>Inquire</span>
-                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 animate-shimmer bg-shimmer-gradient"></div>
-                        </a>
+                        <div class="flex gap-2">
+                            <button onclick="toggleCart(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, '${product.unit}', '${isEmoji ? (imgSrc || '🥚') : '🥚'}')" 
+                                    class="flex-1 bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105 text-sm">
+                                <i class="fas fa-cart-plus mr-1"></i><span id="cart-btn-text-${product.id}">${qty > 0 ? 'In Cart (' + qty + ')' : 'Add'}</span>
+                            </button>
+                            <a href="https://wa.me/254724442020?text=Hello%20Naju,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" 
+                               target="_blank" 
+                               class="bg-naju-orange hover:bg-orange-500 text-white font-bold py-2 px-3 rounded transition-all duration-300 transform hover:scale-105 text-sm">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             `;
@@ -709,7 +733,245 @@
                     }
                 });
             });
+            window.__initDark();
         });
+    </script>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity duration-300" onclick="closeCart()"></div>
+
+    <!-- Cart Panel -->
+    <div id="cart-panel" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-naju-brown text-white">
+            <h2 class="text-xl font-bold"><i class="fas fa-shopping-cart mr-2"></i>Your Cart</h2>
+            <button onclick="closeCart()" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4">
+            <div class="text-center text-gray-500 mt-8">
+                <i class="fas fa-shopping-basket text-5xl mb-4 text-gray-300"></i>
+                <p class="text-lg">Your cart is empty</p>
+                <p class="text-sm mt-2">Browse our products and add items to get started</p>
+            </div>
+        </div>
+        <div id="cart-footer" class="hidden border-t border-gray-200 p-4 space-y-3 bg-gray-50">
+            <div class="flex justify-between text-lg font-bold">
+                <span>Total:</span>
+                <span id="cart-total" class="text-naju-green">KSh 0</span>
+            </div>
+            <button onclick="sendCartToWhatsApp()" 
+                    class="w-full bg-naju-orange hover:bg-orange-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-xl"></i>
+                Send Order via WhatsApp
+            </button>
+            <button onclick="clearCart()" 
+                    class="w-full text-gray-500 hover:text-red-500 text-sm py-2 transition-colors">
+                <i class="fas fa-trash mr-1"></i>Clear Cart
+            </button>
+        </div>
+    </div>
+
+    <!-- Floating Cart Button -->
+    <button id="cart-fab" onclick="openCart()" 
+            class="fixed bottom-6 right-6 bg-naju-green hover:bg-green-700 text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 z-30 hidden items-center justify-center">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">0</span>
+    </button>
+
+    <style>
+        #cart-panel.open { transform: translateX(0); }
+        #cart-overlay.open { display: block; }
+        .cart-item-enter { animation: slideInRight 0.3s ease-out; }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .qty-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; transition: all 0.2s; }
+    </style>
+
+    <script>
+        // ===== WhatsApp Cart =====
+        const CART_KEY = 'naju_cart';
+        const WA_NUMBER = '254724442020';
+
+        function getCart() {
+            try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; }
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        }
+
+        function getCartItem(productId) {
+            return getCart().find(item => item.id === productId);
+        }
+
+        function updateCartUI() {
+            const cart = getCart();
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const fab = document.getElementById('cart-fab');
+            const badge = document.getElementById('cart-badge');
+
+            if (count > 0) {
+                fab.classList.remove('hidden');
+                fab.classList.add('flex');
+                badge.textContent = count > 99 ? '99+' : count;
+            } else {
+                fab.classList.add('hidden');
+                fab.classList.remove('flex');
+            }
+
+            const container = document.getElementById('cart-items');
+            const footer = document.getElementById('cart-footer');
+
+            if (count === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 mt-8"><i class="fas fa-shopping-basket text-5xl mb-4 text-gray-300"></i><p class="text-lg">Your cart is empty</p><p class="text-sm mt-2">Browse our products and add items to get started</p></div>';
+                footer.classList.add('hidden');
+            } else {
+                let html = '';
+                let total = 0;
+                cart.forEach((item, idx) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    html += `
+                        <div class="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm mb-2 cart-item-enter" style="animation-delay: ${idx * 0.05}s">
+                            <span class="text-3xl flex-shrink-0">${item.image || '🥚'}</span>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold text-naju-brown truncate">${item.name}</p>
+                                <p class="text-sm text-gray-500">KSh ${item.price.toLocaleString()}/${item.unit}</p>
+                                <p class="text-sm font-bold text-naju-green">KSh ${itemTotal.toLocaleString()}</p>
+                            </div>
+                            <div class="flex items-center gap-1 flex-shrink-0">
+                                <button onclick="updateQty(${item.id}, -1)" class="qty-btn bg-gray-200 hover:bg-gray-300 text-gray-700">−</button>
+                                <span class="w-8 text-center font-bold">${item.quantity}</span>
+                                <button onclick="updateQty(${item.id}, 1)" class="qty-btn bg-naju-green hover:bg-green-700 text-white">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                document.getElementById('cart-total').textContent = 'KSh ' + total.toLocaleString();
+                footer.classList.remove('hidden');
+            }
+        }
+
+        function toggleCart(id, name, price, unit, image) {
+            let cart = getCart();
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                cart = cart.filter(item => item.id !== id);
+            } else {
+                cart.push({ id, name, price, unit, image, quantity: 1 });
+            }
+            saveCart(cart);
+            updateCartUI();
+            const btnText = document.getElementById('cart-btn-text-' + id);
+            if (btnText) {
+                const item = getCartItem(id);
+                btnText.textContent = item ? 'In Cart (' + item.quantity + ')' : 'Add';
+            }
+        }
+
+        function updateQty(id, delta) {
+            let cart = getCart();
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            saveCart(cart);
+            updateCartUI();
+            const btnText = document.getElementById('cart-btn-text-' + id);
+            if (btnText) {
+                const cartItem = getCartItem(id);
+                btnText.textContent = cartItem ? 'In Cart (' + cartItem.quantity + ')' : 'Add';
+            }
+        }
+
+        function clearCart() {
+            if (!confirm('Clear your cart?')) return;
+            saveCart([]);
+            updateCartUI();
+            document.querySelectorAll('[id^="cart-btn-text-"]').forEach(el => el.textContent = 'Add');
+        }
+
+        function openCart() { 
+            document.getElementById('cart-panel').classList.add('open');
+            document.getElementById('cart-overlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            document.getElementById('cart-panel').classList.remove('open');
+            document.getElementById('cart-overlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function sendCartToWhatsApp() {
+            const cart = getCart();
+            if (cart.length === 0) { alert('Your cart is empty!'); return; }
+
+            let message = 'Hello Naju Poultry! 👋\n\nI would like to order:\n\n';
+            let total = 0;
+            cart.forEach((item, i) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `${i + 1}. ${item.name} (${item.unit}) × ${item.quantity} = KSh ${itemTotal.toLocaleString()}\n`;
+            });
+            message += `\n━━━━━━━━━━━━━━━\n*Total: KSh ${total.toLocaleString()}*\n━━━━━━━━━━━━━━━\n\n`;
+            message += 'Please call me for delivery arrangements. 🙏';
+
+            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Initialize cart UI on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartUI();
+        });
+
+        // Update all cart button texts after products load
+        const origRender = renderProducts;
+        renderProducts = function(products) {
+            origRender(products);
+            setTimeout(() => {
+                const cart = getCart();
+                cart.forEach(item => {
+                    const btn = document.getElementById('cart-btn-text-' + item.id);
+                    if (btn) btn.textContent = 'In Cart (' + item.quantity + ')';
+                });
+            }, 100);
+        };
+
+        // Dark Mode Toggle
+        (function() {
+            const html = document.documentElement;
+            const stored = localStorage.getItem('naju_dark');
+            if (stored === 'true') html.classList.add('dark');
+
+            window.__darkToggle = function() {
+                const isDark = html.classList.toggle('dark');
+                localStorage.setItem('naju_dark', isDark);
+                const icon = isDark ? 'sun' : 'moon';
+                document.querySelectorAll('#dark-toggle i, #dark-toggle-mobile i').forEach(el => {
+                    el.className = 'fas ' + (icon === 'moon' ? 'fa-moon' : 'fa-sun');
+                });
+                document.querySelectorAll('#dark-toggle-mobile span').forEach(el => {
+                    el.textContent = icon === 'moon' ? 'Dark Mode' : 'Light Mode';
+                });
+            };
+
+            window.__initDark = function() {
+                const html = document.documentElement;
+                const icon = html.classList.contains('dark') ? 'sun' : 'moon';
+                document.querySelectorAll('#dark-toggle i, #dark-toggle-mobile i').forEach(el => {
+                    el.className = 'fas ' + (icon === 'moon' ? 'fa-moon' : 'fa-sun');
+                });
+                document.querySelectorAll('#dark-toggle-mobile span').forEach(el => {
+                    el.textContent = icon === 'moon' ? 'Dark Mode' : 'Light Mode';
+                });
+                document.querySelectorAll('#dark-toggle, #dark-toggle-mobile').forEach(btn => {
+                    btn.addEventListener('click', window.__darkToggle);
+                });
+            };
+        })();
     </script>
 </body>
 </html>
