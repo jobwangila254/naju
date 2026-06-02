@@ -47,10 +47,7 @@
                 </button>
             </form>
             
-            <div id="login-error" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
-                <i class="fas fa-exclamation-circle mr-2"></i>
-                Invalid email or password
-            </div>
+            <div id="login-error" class="hidden mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg text-sm"></div>
         </div>
     </div>
 
@@ -329,10 +326,16 @@
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                document.getElementById('login-error').classList.remove('hidden');
+                const msg = document.getElementById('login-error');
+                msg.classList.remove('hidden');
+                if (error.message === 'Invalid login credentials') {
+                    msg.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i>Invalid email or password. Make sure the user exists in Supabase Auth and email confirmation is disabled (Authentication > Providers > Email > Disable confirm email).';
+                } else {
+                    msg.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i>Login failed: ' + error.message;
+                }
                 setTimeout(() => {
-                    document.getElementById('login-error').classList.add('hidden');
-                }, 3000);
+                    msg.classList.add('hidden');
+                }, 6000);
             }
         });
 
@@ -393,11 +396,22 @@
                 document.getElementById('new-messages').textContent = newMessages || 0;
                 document.getElementById('low-stock').textContent = (products || []).filter(p => p.stock < 20).length;
 
-                const { data: recentDeliveries } = await sb
-                    .from('delivery_requests')
-                    .select('customer_name, address, preferred_date, location_link')
-                    .order('created_at', { ascending: false })
-                    .limit(5);
+                let recentDeliveries;
+                try {
+                    const r = await sb
+                        .from('delivery_requests')
+                        .select('customer_name, address, preferred_date, location_link')
+                        .order('created_at', { ascending: false })
+                        .limit(5);
+                    recentDeliveries = r.data;
+                } catch (_) {
+                    const r = await sb
+                        .from('delivery_requests')
+                        .select('customer_name, address, preferred_date')
+                        .order('created_at', { ascending: false })
+                        .limit(5);
+                    recentDeliveries = r.data;
+                }
 
                 document.getElementById('recent-deliveries').innerHTML = (recentDeliveries || []).map(d => `
                     <div class="p-3 bg-gray-50 rounded">
