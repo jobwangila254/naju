@@ -26,6 +26,9 @@ CREATE TABLE delivery_requests (
     preferred_time TEXT DEFAULT '',
     product_interest TEXT DEFAULT '',
     notes TEXT DEFAULT '',
+    latitude TEXT DEFAULT '',
+    longitude TEXT DEFAULT '',
+    location_link TEXT DEFAULT '',
     status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'contacted', 'delivered', 'cancelled')),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
