@@ -1,7 +1,7 @@
 {
   "version": 2,
   "name": "naju-poultry",
-  "buildCommand": null,
+  "buildCommand": "npm run build:css",
   "outputDirectory": ".",
   "routes": [
     { "src": "/", "dest": "/index.html" },
