@@ -249,12 +249,13 @@
                 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="overflow-x-auto">
-                    <table class="w-full min-w-[700px]">
+                    <table class="w-full min-w-[800px]">
                         <thead class="bg-naju-brown text-white">
                             <tr>
                                 <th class="px-6 py-3 text-left">Customer Name</th>
                                 <th class="px-6 py-3 text-left">Phone</th>
                                 <th class="px-6 py-3 text-left">Address</th>
+                                <th class="px-6 py-3 text-left">Location</th>
                                 <th class="px-6 py-3 text-left">Preferred Date</th>
                                 <th class="px-6 py-3 text-left">Product Interest</th>
                                 <th class="px-6 py-3 text-left">Status</th>
@@ -488,7 +489,8 @@
                         <tr>
                             <td class="px-6 py-4">${d.customer_name}</td>
                             <td class="px-6 py-4">${d.phone}</td>
-                            <td class="px-6 py-4">${d.address}</td>
+                            <td class="px-6 py-4 max-w-[200px] truncate">${d.address}</td>
+                            <td class="px-6 py-4">${d.location_link ? `<a href="${d.location_link}" target="_blank" class="text-naju-green hover:text-green-700 font-semibold flex items-center"><i class="fas fa-map-marker-alt mr-1"></i>View Map</a>` : '<span class="text-gray-400">—</span>'}</td>
                             <td class="px-6 py-4">${d.preferred_date}</td>
                             <td class="px-6 py-4">${d.product_interest}</td>
                             <td class="px-6 py-4">
@@ -506,7 +508,7 @@
                             </td>
                         </tr>
                     `;
-                }).join('') || '<tr><td colspan="7" class="text-center py-4">No delivery requests found</td></tr>';
+                }).join('') || '<tr><td colspan="8" class="text-center py-4">No delivery requests found</td></tr>';
             } catch (error) {
                 console.error('Error loading delivery requests:', error);
             }
