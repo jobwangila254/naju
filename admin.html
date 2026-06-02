@@ -877,76 +877,75 @@
             charts = {};
         }
 
-        function renderCharts() {
+        async function renderCharts() {
             if (typeof Chart === 'undefined') return;
             destroyCharts();
 
-            const p1 = sb.from('delivery_requests').select('status').catch(() => ({ data: [] }));
-            const p2 = sb.from('products').select('category, stock, price, name').catch(() => ({ data: [] }));
-            const p3 = sb.from('delivery_requests').select('created_at').gte('created_at', new Date(Date.now() - 7*86400000).toISOString()).catch(() => ({ data: [] }));
+            let deliveries = [], products = [], recent = [];
+            try { const r = await sb.from('delivery_requests').select('status'); if (!r.error) deliveries = r.data || []; } catch (e) {}
+            try { const r = await sb.from('products').select('category, stock, price, name'); if (!r.error) products = r.data || []; } catch (e) {}
+            try {
+                const cutoff = new Date(Date.now() - 7*86400000).toISOString();
+                const r = await sb.from('delivery_requests').select('created_at').gte('created_at', cutoff);
+                if (!r.error) recent = r.data || [];
+            } catch (e) {}
 
-            Promise.all([p1, p2, p3]).then(([deliveriesRes, productsRes, recentRes]) => {
-                const deliveries = deliveriesRes.data || [];
-                const products = productsRes.data || [];
-                const recent = recentRes.data || [];
+            // Status pie chart
+            const statusCounts = {};
+            deliveries.forEach(d => { statusCounts[d.status] = (statusCounts[d.status] || 0) + 1; });
+            const statusLbls = Object.keys(statusCounts).map(s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
+            const statusVals = Object.values(statusCounts);
+            const statusColors = { pending: '#f59e0b', contacted: '#3b82f6', confirmed: '#6366f1', out_for_delivery: '#f97316', delivered: '#22c55e', cancelled: '#ef4444' };
+            const statusBg = Object.keys(statusCounts).map(s => statusColors[s] || '#6b7280');
 
-                // Status pie chart
-                const statusCounts = {};
-                deliveries.forEach(d => { statusCounts[d.status] = (statusCounts[d.status] || 0) + 1; });
-                const statusLabels = Object.keys(statusCounts).map(s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
-                const statusValues = Object.values(statusCounts);
-                const statusColors = { pending: '#f59e0b', contacted: '#3b82f6', confirmed: '#6366f1', out_for_delivery: '#f97316', delivered: '#22c55e', cancelled: '#ef4444' };
-                const statusBg = Object.keys(statusCounts).map(s => statusColors[s] || '#6b7280');
+            const c1 = document.getElementById('status-chart');
+            if (c1 && statusLbls.length) charts.status = new Chart(c1, {
+                type: 'doughnut', data: { labels: statusLbls, datasets: [{ data: statusVals, backgroundColor: statusBg, borderWidth: 0 }] },
+                options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+            });
 
-                const c1 = document.getElementById('status-chart');
-                if (c1 && statusLabels.length) charts.status = new Chart(c1, {
-                    type: 'doughnut', data: { labels: statusLabels, datasets: [{ data: statusValues, backgroundColor: statusBg, borderWidth: 0 }] },
-                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-                });
+            // Category bar chart
+            const catCounts = {};
+            products.forEach(p => { catCounts[p.category] = (catCounts[p.category] || 0) + 1; });
+            const catLbls = Object.keys(catCounts).map(c => c.charAt(0).toUpperCase() + c.slice(1));
+            const catVals = Object.values(catCounts);
 
-                // Category bar chart
-                const catCounts = {};
-                products.forEach(p => { catCounts[p.category] = (catCounts[p.category] || 0) + 1; });
-                const catLabels = Object.keys(catCounts).map(c => c.charAt(0).toUpperCase() + c.slice(1));
-                const catValues = Object.values(catCounts);
+            const c2 = document.getElementById('category-chart');
+            if (c2 && catLbls.length) charts.category = new Chart(c2, {
+                type: 'bar', data: { labels: catLbls, datasets: [{ label: 'Products', data: catVals, backgroundColor: '#2E7D32', borderRadius: 6 }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
 
-                const c2 = document.getElementById('category-chart');
-                if (c2 && catLabels.length) charts.category = new Chart(c2, {
-                    type: 'bar', data: { labels: catLabels, datasets: [{ label: 'Products', data: catValues, backgroundColor: '#2E7D32', borderRadius: 6 }] },
-                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-                });
+            // Stock bar chart
+            const stockNames = products.map(p => p.name && p.name.length > 20 ? p.name.substring(0, 18) + '..' : (p.name || 'Unknown'));
+            const stockVals = products.map(p => p.stock);
+            const stockColors = stockVals.map(v => v < 10 ? '#ef4444' : v < 20 ? '#f59e0b' : '#22c55e');
 
-                // Stock bar chart
-                const stockNames = products.map(p => p.name && p.name.length > 20 ? p.name.substring(0, 18) + '..' : (p.name || 'Unknown'));
-                const stockValues = products.map(p => p.stock);
-                const stockColors = stockValues.map(v => v < 10 ? '#ef4444' : v < 20 ? '#f59e0b' : '#22c55e');
+            const c3 = document.getElementById('stock-chart');
+            if (c3 && stockNames.length) charts.stock = new Chart(c3, {
+                type: 'bar', data: { labels: stockNames, datasets: [{ label: 'Stock', data: stockVals, backgroundColor: stockColors, borderRadius: 6 }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
 
-                const c3 = document.getElementById('stock-chart');
-                if (c3 && stockNames.length) charts.stock = new Chart(c3, {
-                    type: 'bar', data: { labels: stockNames, datasets: [{ label: 'Stock', data: stockValues, backgroundColor: stockColors, borderRadius: 6 }] },
-                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-                });
+            // Timeline chart
+            const days = {};
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(); d.setDate(d.getDate() - i);
+                days[d.toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' })] = 0;
+            }
+            recent.forEach(d => {
+                const key = new Date(d.created_at).toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' });
+                if (days[key] !== undefined) days[key]++;
+            });
 
-                // Timeline: deliveries in last 7 days
-                const days = {};
-                for (let i = 6; i >= 0; i--) {
-                    const d = new Date(); d.setDate(d.getDate() - i);
-                    days[d.toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' })] = 0;
-                }
-                recent.forEach(d => {
-                    const key = new Date(d.created_at).toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' });
-                    if (days[key] !== undefined) days[key]++;
-                });
-
-                const c4 = document.getElementById('timeline-chart');
-                if (c4) charts.timeline = new Chart(c4, {
-                    type: 'line', data: { labels: Object.keys(days), datasets: [{
-                        label: 'Deliveries', data: Object.values(days), borderColor: '#F4A460', backgroundColor: 'rgba(244, 164, 96, 0.1)',
-                        fill: true, tension: 0.4, pointBackgroundColor: '#8B4513', pointRadius: 4
-                    }] },
-                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-                });
-            }).catch(err => console.error('Error rendering charts:', err));
+            const c4 = document.getElementById('timeline-chart');
+            if (c4) charts.timeline = new Chart(c4, {
+                type: 'line', data: { labels: Object.keys(days), datasets: [{
+                    label: 'Deliveries', data: Object.values(days), borderColor: '#F4A460', backgroundColor: 'rgba(244, 164, 96, 0.1)',
+                    fill: true, tension: 0.4, pointBackgroundColor: '#8B4513', pointRadius: 4
+                }] },
+                options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
         }
 
         // Override loadDashboardData to include charts
