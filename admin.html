@@ -17,8 +17,8 @@
         Skip to main content
     </a>
     <!-- Login Screen -->
-    <div id="login-screen" class="min-h-screen flex items-center justify-center">
-        <div class="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
+    <div id="login-screen" class="min-h-screen flex items-center justify-center px-4">
+        <div class="max-w-md w-full mx-4 bg-white rounded-lg shadow-lg p-6 sm:p-8">
             <div class="text-center mb-8">
                 <div class="flex items-center justify-center mb-4">
                     <i class="fas fa-egg text-naju-orange text-3xl mr-2"></i>
@@ -63,7 +63,7 @@
                             <span class="font-bold text-xl text-naju-brown">NAJU Admin</span>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-4">
+                    <div class="hidden md:flex items-center space-x-4">
                         <button onclick="showSection('dashboard', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Dashboard</button>
                         <button onclick="showSection('products', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Products</button>
                         <button onclick="showSection('delivery', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Delivery</button>
@@ -72,6 +72,22 @@
                             <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </button>
                     </div>
+                    <div class="md:hidden flex items-center">
+                        <button id="admin-menu-btn" class="text-naju-brown hover:text-naju-orange focus:outline-none focus:ring-2 focus:ring-naju-orange rounded-lg p-2" aria-label="Toggle admin menu" aria-expanded="false">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="admin-mobile-menu" class="hidden md:hidden bg-white border-t">
+                <div class="px-2 pt-2 pb-3 space-y-1">
+                    <button onclick="showSection('dashboard', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Dashboard</button>
+                    <button onclick="showSection('products', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Products</button>
+                    <button onclick="showSection('delivery', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Delivery</button>
+                    <button onclick="showSection('messages', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Messages</button>
+                    <button onclick="logout()" class="block w-full text-left px-3 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </button>
                 </div>
             </div>
         </nav>
@@ -292,6 +308,22 @@
         } catch (error) {
             console.error('Naju Poultry Admin: Supabase initialization failed:', error);
         }
+
+        // Admin mobile menu toggle
+        function toggleAdminMenu() {
+            const menu = document.getElementById('admin-mobile-menu');
+            const btn = document.getElementById('admin-menu-btn');
+            if (!menu || !btn) return;
+            const isHidden = menu.classList.contains('hidden');
+            menu.classList.toggle('hidden');
+            btn.setAttribute('aria-expanded', !isHidden);
+            const icon = btn.querySelector('i');
+            if (icon) {
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            }
+        }
+        document.getElementById('admin-menu-btn')?.addEventListener('click', toggleAdminMenu);
 
         // Check if already logged in via session
         window.onload = function() {
