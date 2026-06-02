@@ -415,6 +415,7 @@
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('admin-dashboard').classList.remove('hidden');
             loadDashboardData();
+            setTimeout(renderCharts, 600);
         }
 
         // Logout
@@ -880,60 +881,51 @@
             if (typeof Chart === 'undefined') return;
             destroyCharts();
 
-            Promise.all([
-                sb.from('delivery_requests').select('status'),
-                sb.from('products').select('category, stock, price'),
-                sb.from('delivery_requests').select('created_at').gte('created_at', new Date(Date.now() - 7*86400000).toISOString())
-            ]).then(([deliveriesRes, productsRes, recentRes]) => {
+            const p1 = sb.from('delivery_requests').select('status').catch(() => ({ data: [] }));
+            const p2 = sb.from('products').select('category, stock, price, name').catch(() => ({ data: [] }));
+            const p3 = sb.from('delivery_requests').select('created_at').gte('created_at', new Date(Date.now() - 7*86400000).toISOString()).catch(() => ({ data: [] }));
+
+            Promise.all([p1, p2, p3]).then(([deliveriesRes, productsRes, recentRes]) => {
+                const deliveries = deliveriesRes.data || [];
+                const products = productsRes.data || [];
+                const recent = recentRes.data || [];
+
                 // Status pie chart
                 const statusCounts = {};
-                (deliveriesRes.data || []).forEach(d => {
-                    statusCounts[d.status] = (statusCounts[d.status] || 0) + 1;
-                });
+                deliveries.forEach(d => { statusCounts[d.status] = (statusCounts[d.status] || 0) + 1; });
                 const statusLabels = Object.keys(statusCounts).map(s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
                 const statusValues = Object.values(statusCounts);
                 const statusColors = { pending: '#f59e0b', contacted: '#3b82f6', confirmed: '#6366f1', out_for_delivery: '#f97316', delivered: '#22c55e', cancelled: '#ef4444' };
                 const statusBg = Object.keys(statusCounts).map(s => statusColors[s] || '#6b7280');
 
-                const ctx1 = document.getElementById('status-chart');
-                if (ctx1) {
-                    charts.status = new Chart(ctx1, {
-                        type: 'doughnut',
-                        data: { labels: statusLabels, datasets: [{ data: statusValues, backgroundColor: statusBg, borderWidth: 0 }] },
-                        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
-                    });
-                }
+                const c1 = document.getElementById('status-chart');
+                if (c1 && statusLabels.length) charts.status = new Chart(c1, {
+                    type: 'doughnut', data: { labels: statusLabels, datasets: [{ data: statusValues, backgroundColor: statusBg, borderWidth: 0 }] },
+                    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                });
 
                 // Category bar chart
                 const catCounts = {};
-                (productsRes.data || []).forEach(p => {
-                    catCounts[p.category] = (catCounts[p.category] || 0) + 1;
-                });
+                products.forEach(p => { catCounts[p.category] = (catCounts[p.category] || 0) + 1; });
                 const catLabels = Object.keys(catCounts).map(c => c.charAt(0).toUpperCase() + c.slice(1));
                 const catValues = Object.values(catCounts);
 
-                const ctx2 = document.getElementById('category-chart');
-                if (ctx2) {
-                    charts.category = new Chart(ctx2, {
-                        type: 'bar',
-                        data: { labels: catLabels, datasets: [{ label: 'Products', data: catValues, backgroundColor: '#2E7D32', borderRadius: 6 }] },
-                        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-                    });
-                }
+                const c2 = document.getElementById('category-chart');
+                if (c2 && catLabels.length) charts.category = new Chart(c2, {
+                    type: 'bar', data: { labels: catLabels, datasets: [{ label: 'Products', data: catValues, backgroundColor: '#2E7D32', borderRadius: 6 }] },
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
 
                 // Stock bar chart
-                const stockNames = (productsRes.data || []).map(p => p.name.length > 20 ? p.name.substring(0, 18) + '..' : p.name);
-                const stockValues = (productsRes.data || []).map(p => p.stock);
+                const stockNames = products.map(p => p.name && p.name.length > 20 ? p.name.substring(0, 18) + '..' : (p.name || 'Unknown'));
+                const stockValues = products.map(p => p.stock);
                 const stockColors = stockValues.map(v => v < 10 ? '#ef4444' : v < 20 ? '#f59e0b' : '#22c55e');
 
-                const ctx3 = document.getElementById('stock-chart');
-                if (ctx3) {
-                    charts.stock = new Chart(ctx3, {
-                        type: 'bar',
-                        data: { labels: stockNames, datasets: [{ label: 'Stock', data: stockValues, backgroundColor: stockColors, borderRadius: 6 }] },
-                        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-                    });
-                }
+                const c3 = document.getElementById('stock-chart');
+                if (c3 && stockNames.length) charts.stock = new Chart(c3, {
+                    type: 'bar', data: { labels: stockNames, datasets: [{ label: 'Stock', data: stockValues, backgroundColor: stockColors, borderRadius: 6 }] },
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
 
                 // Timeline: deliveries in last 7 days
                 const days = {};
@@ -941,22 +933,19 @@
                     const d = new Date(); d.setDate(d.getDate() - i);
                     days[d.toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' })] = 0;
                 }
-                (recentRes.data || []).forEach(d => {
+                recent.forEach(d => {
                     const key = new Date(d.created_at).toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' });
                     if (days[key] !== undefined) days[key]++;
                 });
 
-                const ctx4 = document.getElementById('timeline-chart');
-                if (ctx4) {
-                    charts.timeline = new Chart(ctx4, {
-                        type: 'line',
-                        data: { labels: Object.keys(days), datasets: [{
-                            label: 'Deliveries', data: Object.values(days), borderColor: '#F4A460', backgroundColor: 'rgba(244, 164, 96, 0.1)',
-                            fill: true, tension: 0.4, pointBackgroundColor: '#8B4513', pointRadius: 4
-                        }] },
-                        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-                    });
-                }
+                const c4 = document.getElementById('timeline-chart');
+                if (c4) charts.timeline = new Chart(c4, {
+                    type: 'line', data: { labels: Object.keys(days), datasets: [{
+                        label: 'Deliveries', data: Object.values(days), borderColor: '#F4A460', backgroundColor: 'rgba(244, 164, 96, 0.1)',
+                        fill: true, tension: 0.4, pointBackgroundColor: '#8B4513', pointRadius: 4
+                    }] },
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
             }).catch(err => console.error('Error rendering charts:', err));
         }
 
@@ -964,15 +953,9 @@
         const origLoadDashboard = loadDashboardData;
         loadDashboardData = function() {
             origLoadDashboard();
-            setTimeout(() => {
-                const dashSection = document.getElementById('dashboard-section');
-                if (dashSection && !dashSection.classList.contains('hidden')) {
-                    renderCharts();
-                }
-            }, 500);
         };
 
-        // Also render charts when showing dashboard section
+        // Override showSection to render charts only once
         const origShowSection = showSection;
         showSection = function(section, btn) {
             document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
@@ -988,7 +971,7 @@
             }
             if (section === 'dashboard') {
                 loadDashboardData();
-                setTimeout(renderCharts, 300);
+                setTimeout(renderCharts, 500);
             } else if (section === 'products') {
                 loadProducts();
             } else if (section === 'delivery') {
