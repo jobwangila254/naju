@@ -31,6 +31,7 @@ CREATE TABLE delivery_requests (
     location_link TEXT DEFAULT '',
     payment_method TEXT DEFAULT 'cash' CHECK (payment_method IN ('cash', 'mpesa')),
     mpesa_code TEXT DEFAULT '',
+    admin_notes TEXT DEFAULT '',
     status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'contacted', 'confirmed', 'out_for_delivery', 'delivered', 'cancelled')),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );

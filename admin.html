@@ -8,6 +8,7 @@
     <title>Admin Panel - Naju Poultry - Kwanza, Kenya</title>
     <link href="css/tailwind.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
     <script src="js/supabase.js"></script>
 </head>
@@ -148,6 +149,28 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Charts -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">Deliveries by Status</h3>
+                        <canvas id="status-chart" height="250"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">Products by Category</h3>
+                        <canvas id="category-chart" height="250"></canvas>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">Stock Levels</h3>
+                        <canvas id="stock-chart" height="250"></canvas>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">Deliveries Over Time (Last 7 Days)</h3>
+                        <canvas id="timeline-chart" height="250"></canvas>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -261,7 +284,7 @@
                 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="overflow-x-auto">
-                    <table class="w-full min-w-[900px]">
+                    <table class="w-full min-w-[1050px]">
                         <thead class="bg-naju-brown text-white">
                             <tr>
                                 <th class="px-6 py-3 text-left">Customer Name</th>
@@ -271,6 +294,7 @@
                                 <th class="px-6 py-3 text-left">Preferred Date</th>
                                 <th class="px-6 py-3 text-left">Product Interest</th>
                                 <th class="px-6 py-3 text-left">Payment</th>
+                                <th class="px-6 py-3 text-left">Admin Notes</th>
                                 <th class="px-6 py-3 text-left">Status</th>
                                 <th class="px-6 py-3 text-left">Actions</th>
                             </tr>
@@ -541,6 +565,7 @@
                     const paymentHtml = d.payment_method === 'mpesa'
                         ? `<span class="text-green-600 font-semibold">M-Pesa</span>${d.mpesa_code ? `<br><span class="text-xs text-gray-500">Code: ${d.mpesa_code}</span>` : '<br><span class="text-xs text-orange-500">Pending payment</span>'}`
                         : `<span class="text-gray-600">${paymentMethod}</span>`;
+                    const notes = d.admin_notes || '';
                     return `
                         <tr>
                             <td class="px-6 py-4">${d.customer_name}</td>
@@ -550,6 +575,18 @@
                             <td class="px-6 py-4">${d.preferred_date}</td>
                             <td class="px-6 py-4">${d.product_interest}</td>
                             <td class="px-6 py-4">${paymentHtml}</td>
+                            <td class="px-6 py-4 max-w-[150px]">
+                                <div id="notes-display-${d.id}" class="text-sm text-gray-600 cursor-pointer hover:text-naju-brown" onclick="editNotes('${d.id}')" title="Click to edit">
+                                    ${notes ? `<span>${notes}</span>` : '<span class="text-gray-400 italic">Add note...</span>'}
+                                </div>
+                                <div id="notes-edit-${d.id}" class="hidden">
+                                    <textarea id="notes-input-${d.id}" class="w-full text-sm border border-gray-300 rounded px-2 py-1" rows="2">${notes}</textarea>
+                                    <div class="flex gap-1 mt-1">
+                                        <button onclick="saveNotes('${d.id}')" class="text-xs bg-naju-green text-white px-2 py-1 rounded hover:bg-green-700"><i class="fas fa-check"></i></button>
+                                        <button onclick="cancelNotes('${d.id}')" class="text-xs bg-gray-400 text-white px-2 py-1 rounded hover:bg-gray-500"><i class="fas fa-times"></i></button>
+                                    </div>
+                                </div>
+                            </td>
                             <td class="px-6 py-4">
                                 <select onchange="updateDeliveryStatus('${d.id}', this.value)" class="${statusColor} font-semibold">
                                     <option value="pending" ${d.status === 'pending' ? 'selected' : ''}>Pending</option>
@@ -567,7 +604,7 @@
                             </td>
                         </tr>
                     `;
-                }).join('') || '<tr><td colspan="9" class="text-center py-4">No delivery requests found</td></tr>';
+                }).join('') || '<tr><td colspan="10" class="text-center py-4">No delivery requests found</td></tr>';
             } catch (error) {
                 console.error('Error loading delivery requests:', error);
             }
@@ -807,6 +844,159 @@
                 prompt('Copy this link to share with the delivery guy:', url);
             });
         }
+
+        // ===== Admin Notes =====
+        function editNotes(id) {
+            document.getElementById('notes-display-' + id).classList.add('hidden');
+            document.getElementById('notes-edit-' + id).classList.remove('hidden');
+            document.getElementById('notes-input-' + id).focus();
+        }
+
+        function cancelNotes(id) {
+            document.getElementById('notes-display-' + id).classList.remove('hidden');
+            document.getElementById('notes-edit-' + id).classList.add('hidden');
+        }
+
+        async function saveNotes(id) {
+            if (!sb) return;
+            const notes = document.getElementById('notes-input-' + id).value.trim();
+            try {
+                await sb.from('delivery_requests').update({ admin_notes: notes }).eq('id', id);
+                loadDeliveryRequests();
+            } catch (error) {
+                console.error('Error saving notes:', error);
+            }
+        }
+
+        // ===== Dashboard Charts =====
+        let charts = {};
+
+        function destroyCharts() {
+            Object.values(charts).forEach(c => { if (c) c.destroy(); });
+            charts = {};
+        }
+
+        function renderCharts() {
+            if (typeof Chart === 'undefined') return;
+            destroyCharts();
+
+            Promise.all([
+                sb.from('delivery_requests').select('status'),
+                sb.from('products').select('category, stock, price'),
+                sb.from('delivery_requests').select('created_at').gte('created_at', new Date(Date.now() - 7*86400000).toISOString())
+            ]).then(([deliveriesRes, productsRes, recentRes]) => {
+                // Status pie chart
+                const statusCounts = {};
+                (deliveriesRes.data || []).forEach(d => {
+                    statusCounts[d.status] = (statusCounts[d.status] || 0) + 1;
+                });
+                const statusLabels = Object.keys(statusCounts).map(s => s.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()));
+                const statusValues = Object.values(statusCounts);
+                const statusColors = { pending: '#f59e0b', contacted: '#3b82f6', confirmed: '#6366f1', out_for_delivery: '#f97316', delivered: '#22c55e', cancelled: '#ef4444' };
+                const statusBg = Object.keys(statusCounts).map(s => statusColors[s] || '#6b7280');
+
+                const ctx1 = document.getElementById('status-chart');
+                if (ctx1) {
+                    charts.status = new Chart(ctx1, {
+                        type: 'doughnut',
+                        data: { labels: statusLabels, datasets: [{ data: statusValues, backgroundColor: statusBg, borderWidth: 0 }] },
+                        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+                    });
+                }
+
+                // Category bar chart
+                const catCounts = {};
+                (productsRes.data || []).forEach(p => {
+                    catCounts[p.category] = (catCounts[p.category] || 0) + 1;
+                });
+                const catLabels = Object.keys(catCounts).map(c => c.charAt(0).toUpperCase() + c.slice(1));
+                const catValues = Object.values(catCounts);
+
+                const ctx2 = document.getElementById('category-chart');
+                if (ctx2) {
+                    charts.category = new Chart(ctx2, {
+                        type: 'bar',
+                        data: { labels: catLabels, datasets: [{ label: 'Products', data: catValues, backgroundColor: '#2E7D32', borderRadius: 6 }] },
+                        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                    });
+                }
+
+                // Stock bar chart
+                const stockNames = (productsRes.data || []).map(p => p.name.length > 20 ? p.name.substring(0, 18) + '..' : p.name);
+                const stockValues = (productsRes.data || []).map(p => p.stock);
+                const stockColors = stockValues.map(v => v < 10 ? '#ef4444' : v < 20 ? '#f59e0b' : '#22c55e');
+
+                const ctx3 = document.getElementById('stock-chart');
+                if (ctx3) {
+                    charts.stock = new Chart(ctx3, {
+                        type: 'bar',
+                        data: { labels: stockNames, datasets: [{ label: 'Stock', data: stockValues, backgroundColor: stockColors, borderRadius: 6 }] },
+                        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                    });
+                }
+
+                // Timeline: deliveries in last 7 days
+                const days = {};
+                for (let i = 6; i >= 0; i--) {
+                    const d = new Date(); d.setDate(d.getDate() - i);
+                    days[d.toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' })] = 0;
+                }
+                (recentRes.data || []).forEach(d => {
+                    const key = new Date(d.created_at).toLocaleDateString('en-KE', { weekday: 'short', month: 'short', day: 'numeric' });
+                    if (days[key] !== undefined) days[key]++;
+                });
+
+                const ctx4 = document.getElementById('timeline-chart');
+                if (ctx4) {
+                    charts.timeline = new Chart(ctx4, {
+                        type: 'line',
+                        data: { labels: Object.keys(days), datasets: [{
+                            label: 'Deliveries', data: Object.values(days), borderColor: '#F4A460', backgroundColor: 'rgba(244, 164, 96, 0.1)',
+                            fill: true, tension: 0.4, pointBackgroundColor: '#8B4513', pointRadius: 4
+                        }] },
+                        options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                    });
+                }
+            }).catch(err => console.error('Error rendering charts:', err));
+        }
+
+        // Override loadDashboardData to include charts
+        const origLoadDashboard = loadDashboardData;
+        loadDashboardData = function() {
+            origLoadDashboard();
+            setTimeout(() => {
+                const dashSection = document.getElementById('dashboard-section');
+                if (dashSection && !dashSection.classList.contains('hidden')) {
+                    renderCharts();
+                }
+            }, 500);
+        };
+
+        // Also render charts when showing dashboard section
+        const origShowSection = showSection;
+        showSection = function(section, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            const el = document.getElementById(section + '-section');
+            if (el) el.classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('text-naju-orange');
+                b.classList.add('text-naju-brown');
+            });
+            if (btn) {
+                btn.classList.remove('text-naju-brown');
+                btn.classList.add('text-naju-orange');
+            }
+            if (section === 'dashboard') {
+                loadDashboardData();
+                setTimeout(renderCharts, 300);
+            } else if (section === 'products') {
+                loadProducts();
+            } else if (section === 'delivery') {
+                loadDeliveryRequests();
+            } else if (section === 'messages') {
+                loadContactMessages();
+            }
+        };
     </script>
 </body>
 </html>
