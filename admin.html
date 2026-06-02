@@ -468,31 +468,17 @@
                 document.getElementById('new-messages').textContent = newMessages || 0;
                 document.getElementById('low-stock').textContent = (products || []).filter(p => p.stock < 20).length;
 
-                let recentDeliveries;
-                const rd = await sb
-                    .from('delivery_requests')
-                    .select('customer_name, address, preferred_date, location_link')
-                    .order('created_at', { ascending: false })
-                    .limit(5);
-                if (rd.error) {
-                    const rd2 = await sb
-                        .from('delivery_requests')
-                        .select('customer_name, address, preferred_date')
-                        .order('created_at', { ascending: false })
-                        .limit(5);
-                    recentDeliveries = rd2.data;
-                } else {
-                    recentDeliveries = rd.data;
-                }
+                let recentDeliveries = [];
+                try {
+                    const rd = await sb.from('delivery_requests').select('customer_name, address, preferred_date').order('created_at', { ascending: false }).limit(5);
+                    if (!rd.error) recentDeliveries = rd.data || [];
+                } catch (e) {}
 
-                document.getElementById('recent-deliveries').innerHTML = (recentDeliveries || []).map(d => `
+                document.getElementById('recent-deliveries').innerHTML = recentDeliveries.map(d => `
                     <div class="p-3 bg-gray-50 rounded">
                         <p class="font-semibold">${d.customer_name}</p>
                         <p class="text-sm text-gray-600">${d.address}</p>
-                        <div class="flex items-center gap-2 mt-1">
-                            ${d.location_link ? `<a href="${d.location_link}" target="_blank" class="text-xs text-naju-green hover:text-green-700"><i class="fas fa-map-marker-alt mr-1"></i>View Map</a>` : ''}
-                            <p class="text-xs text-naju-green">${d.preferred_date}</p>
-                        </div>
+                        <p class="text-xs text-naju-green mt-1">${d.preferred_date || ''}</p>
                     </div>
                 `).join('') || '<p class="text-gray-500">No recent deliveries</p>';
 
