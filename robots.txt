@@ -4,4 +4,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /js/
 
-Sitemap: https://najupoultry.co.ke/sitemap.xml
+Sitemap: https://naju-smoky.vercel.app/sitemap.xml

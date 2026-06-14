@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>navigator.serviceWorker?.getRegistrations().then(r=>r.forEach(s=>s.unregister()))</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Naju Poultry admin panel - manage products, delivery requests, and customer messages.">
@@ -69,6 +70,7 @@
                         <button onclick="showSection('products', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Products</button>
                         <button onclick="showSection('delivery', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Delivery</button>
                         <button onclick="showSection('messages', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Messages</button>
+                        <button onclick="showSection('orders', this)" class="nav-btn text-naju-brown hover:text-naju-orange font-medium">Orders</button>
                         <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300">
                             <i class="fas fa-sign-out-alt mr-2"></i>Logout
                         </button>
@@ -86,6 +88,7 @@
                     <button onclick="showSection('products', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Products</button>
                     <button onclick="showSection('delivery', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Delivery</button>
                     <button onclick="showSection('messages', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Messages</button>
+                    <button onclick="showSection('orders', this);toggleAdminMenu()" class="nav-btn block w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg">Orders</button>
                     <button onclick="logout()" class="block w-full text-left px-3 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg">
                         <i class="fas fa-sign-out-alt mr-2"></i>Logout
                     </button>
@@ -97,7 +100,12 @@
         <section id="dashboard-section" class="section py-8" tabindex="-1">
             <div id="main-content">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-naju-brown mb-8">Dashboard Overview</h1>
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-naju-brown">Dashboard Overview</h1>
+                    <button onclick="exportDashboardReport()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">
+                        <i class="fas fa-download mr-1"></i>Download Report
+                    </button>
+                </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <div class="bg-white rounded-lg shadow-md p-6">
@@ -179,9 +187,14 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between items-center mb-8">
                     <h1 class="text-3xl font-bold text-naju-brown">Product Management</h1>
-                    <button onclick="showAddProductForm()" class="bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
-                        <i class="fas fa-plus mr-2"></i>Add Product
-                    </button>
+                    <div class="flex gap-2">
+                        <button onclick="exportProductsCSV()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">
+                            <i class="fas fa-download mr-1"></i>Export CSV
+                        </button>
+                        <button onclick="showAddProductForm()" class="bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                            <i class="fas fa-plus mr-2"></i>Add Product
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Add Product Form -->
@@ -280,7 +293,12 @@
         <!-- Delivery Requests Section -->
         <section id="delivery-section" class="section hidden py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-naju-brown mb-8">Delivery Requests</h1>
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-naju-brown">Delivery Requests</h1>
+                    <button onclick="exportDeliveriesCSV()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">
+                        <i class="fas fa-download mr-1"></i>Export CSV
+                    </button>
+                </div>
                 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="overflow-x-auto">
@@ -311,7 +329,12 @@
         <!-- Contact Messages Section -->
         <section id="messages-section" class="section hidden py-8">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold text-naju-brown mb-8">Contact Messages</h1>
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-naju-brown">Contact Messages</h1>
+                    <button onclick="exportMessagesCSV()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">
+                        <i class="fas fa-download mr-1"></i>Export CSV
+                    </button>
+                </div>
                 
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
                     <div class="overflow-x-auto">
@@ -329,6 +352,40 @@
                         </thead>
                         <tbody id="messages-table-body" class="divide-y divide-gray-200">
                             <!-- Will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders-section" class="section hidden py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-bold text-naju-brown">Orders</h1>
+                    <button onclick="exportOrdersCSV()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300 text-sm">
+                        <i class="fas fa-download mr-1"></i>Export CSV
+                    </button>
+                </div>
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                    <div class="overflow-x-auto">
+                    <table class="w-full min-w-[1200px]">
+                        <thead class="bg-naju-brown text-white">
+                            <tr>
+                                <th class="px-6 py-3 text-left">Customer</th>
+                                <th class="px-6 py-3 text-left">Phone</th>
+                                <th class="px-6 py-3 text-left">Address</th>
+                                <th class="px-6 py-3 text-left">Items</th>
+                                <th class="px-6 py-3 text-left">Total</th>
+                                <th class="px-6 py-3 text-left">Delivery</th>
+                                <th class="px-6 py-3 text-left">Payment</th>
+                                <th class="px-6 py-3 text-left">Date</th>
+                                <th class="px-6 py-3 text-left">Status</th>
+                                <th class="px-6 py-3 text-left">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body" class="divide-y divide-gray-200">
                         </tbody>
                     </table>
                     </div>
@@ -632,6 +689,104 @@
             } catch (error) {
                 console.error('Error loading contact messages:', error);
             }
+        }
+
+        // ===== Orders Management =====
+        async function loadOrders() {
+            try {
+                if (!sb) return;
+                const { data: orders, error } = await sb
+                    .from('orders')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (error) throw error;
+
+                document.getElementById('orders-table-body').innerHTML = (orders || []).map(o => {
+                    let items = '';
+                    try { const parsed = JSON.parse(o.items || '[]'); items = parsed.map(i => `${i.name} × ${i.quantity}`).join(', '); } catch {}
+                    const paymentBadge = o.payment_method === 'mpesa'
+                        ? `<span class="text-green-600 font-semibold">M-Pesa${o.mpesa_code ? `<br><span class="text-xs text-gray-500">Code: ${o.mpesa_code}</span>` : ''}</span>`
+                        : `<span class="text-gray-600">Cash</span>`;
+                    const statusColors = { pending: 'text-orange-600', confirmed: 'text-green-600', cancelled: 'text-red-600', delivered: 'text-blue-600' };
+                    const deliveryCost = Number(o.delivery_cost || 0);
+                    const grandTotal = Number(o.total || 0) + deliveryCost;
+                    return `
+                        <tr>
+                            <td class="px-6 py-4 font-medium">${o.customer_name}</td>
+                            <td class="px-6 py-4">${o.phone}</td>
+                            <td class="px-6 py-4 text-sm max-w-[150px] truncate" title="${(o.address || '').replace(/"/g, '&quot;')}">${o.address || '—'}</td>
+                            <td class="px-6 py-4 text-sm">${items || '—'}</td>
+                            <td class="px-6 py-4 font-bold text-naju-green">KSh ${Number(o.total).toLocaleString()}</td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-1">
+                                    <span class="text-sm font-semibold text-naju-brown">KSh</span>
+                                    <input type="number" value="${deliveryCost}" min="0" step="50"
+                                           onchange="updateDeliveryCost('${o.id}', this.value)"
+                                           class="w-20 px-1 py-0.5 border border-gray-300 rounded text-sm text-center">
+                                </div>
+                                ${deliveryCost > 0 ? `<div class="text-xs text-gray-500 mt-1">Total: KSh ${grandTotal.toLocaleString()}</div>` : ''}
+                            </td>
+                            <td class="px-6 py-4">${paymentBadge}</td>
+                            <td class="px-6 py-4 text-sm">${new Date(o.created_at).toLocaleDateString()}</td>
+                            <td class="px-6 py-4">
+                                <select onchange="updateOrderStatus('${o.id}', this.value)" class="${statusColors[o.status] || 'text-gray-600'} font-semibold">
+                                    <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+                                    <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                    <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                                </select>
+                            </td>
+                            <td class="px-6 py-4">
+                                <button onclick="deleteOrder('${o.id}')" class="text-red-500 hover:text-red-700">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('') || '<tr><td colspan="8" class="text-center py-4">No orders found</td></tr>';
+            } catch (error) {
+                console.error('Error loading orders:', error);
+            }
+        }
+
+        async function updateOrderStatus(id, status) {
+            if (!sb) return;
+            try {
+                await sb.from('orders').update({ status }).eq('id', id);
+                loadOrders();
+            } catch (error) {
+                console.error('Error updating order status:', error);
+            }
+        }
+
+        async function updateDeliveryCost(id, cost) {
+            if (!sb) return;
+            const val = parseFloat(cost) || 0;
+            try {
+                await sb.from('orders').update({ delivery_cost: val }).eq('id', id);
+            } catch (error) {
+                console.error('Error updating delivery cost:', error);
+            }
+        }
+
+        async function deleteOrder(id) {
+            if (!sb) return;
+            if (confirm('Delete this order?')) {
+                try {
+                    await sb.from('orders').delete().eq('id', id);
+                    loadOrders();
+                } catch (error) {
+                    console.error('Error deleting order:', error);
+                }
+            }
+        }
+
+        async function exportOrdersCSV() {
+            if (!sb) return;
+            const { data } = await sb.from('orders').select('*');
+            const rows = [['ID', 'Customer Name', 'Phone', 'Address', 'Items', 'Total', 'Delivery Cost', 'Grand Total', 'Payment Method', 'M-Pesa Code', 'Status', 'Notes', 'Created At']];
+            (data || []).forEach(o => rows.push([o.id, o.customer_name, o.phone, o.address, o.items, o.total, o.delivery_cost || 0, (Number(o.total || 0) + Number(o.delivery_cost || 0)), o.payment_method, o.mpesa_code || '', o.status, o.notes || '', o.created_at]));
+            downloadCSV('naju-orders.csv', rows);
         }
 
         function previewImage(input) {
@@ -940,6 +1095,63 @@
             origLoadDashboard();
         };
 
+        // ===== CSV Export Functions =====
+        function downloadCSV(filename, rows) {
+            const csv = rows.map(r => r.map(c => {
+                const s = String(c ?? '');
+                return s.includes(',') || s.includes('"') || s.includes('\n') ? '"' + s.replace(/"/g, '""') + '"' : s;
+            }).join(',')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        async function exportProductsCSV() {
+            if (!sb) return;
+            const { data } = await sb.from('products').select('*');
+            const rows = [['ID', 'Name', 'Description', 'Price', 'Category', 'Unit', 'Stock', 'Image URL', 'Created At']];
+            (data || []).forEach(p => rows.push([p.id, p.name, p.description, p.price, p.category, p.unit, p.stock, p.image_url, p.created_at]));
+            downloadCSV('naju-products.csv', rows);
+        }
+
+        async function exportDeliveriesCSV() {
+            if (!sb) return;
+            const { data } = await sb.from('delivery_requests').select('*');
+            const rows = [['ID', 'Customer Name', 'Phone', 'Email', 'Address', 'Preferred Date', 'Preferred Time', 'Product Interest', 'Notes', 'Payment Method', 'M-Pesa Code', 'Status', 'Admin Notes', 'Created At']];
+            (data || []).forEach(d => rows.push([d.id, d.customer_name, d.phone, d.email, d.address, d.preferred_date, d.preferred_time, d.product_interest, d.notes, d.payment_method, d.mpesa_code, d.status, d.admin_notes, d.created_at]));
+            downloadCSV('naju-deliveries.csv', rows);
+        }
+
+        async function exportMessagesCSV() {
+            if (!sb) return;
+            const { data } = await sb.from('contact_messages').select('*');
+            const rows = [['ID', 'Name', 'Email', 'Phone', 'Message', 'Status', 'Created At']];
+            (data || []).forEach(m => rows.push([m.id, m.name, m.email, m.phone, m.message, m.status, m.created_at]));
+            downloadCSV('naju-messages.csv', rows);
+        }
+
+        async function exportDashboardReport() {
+            if (!sb) return;
+            const [products, deliveries] = await Promise.all([
+                sb.from('products').select('*'),
+                sb.from('delivery_requests').select('*')
+            ]);
+            const pRows = [['ID', 'Name', 'Price', 'Category', 'Stock']];
+            (products.data || []).forEach(p => pRows.push([p.id, p.name, p.price, p.category, p.stock]));
+            const dRows = [['ID', 'Customer', 'Date', 'Status']];
+            (deliveries.data || []).forEach(d => dRows.push([d.id, d.customer_name, d.preferred_date, d.status]));
+            const csv = '=== PRODUCTS ===\n' + pRows.map(r => r.join(',')).join('\n') + '\n\n=== DELIVERY REQUESTS ===\n' + dRows.map(r => r.join(',')).join('\n');
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'naju-dashboard-report.csv';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
         // Override showSection to render charts only once
         const origShowSection = showSection;
         showSection = function(section, btn) {
@@ -963,6 +1175,8 @@
                 loadDeliveryRequests();
             } else if (section === 'messages') {
                 loadContactMessages();
+            } else if (section === 'orders') {
+                loadOrders();
             }
         };
     </script>

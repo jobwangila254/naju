@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>navigator.serviceWorker?.getRegistrations().then(r=>r.forEach(s=>s.unregister()))</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Browse our complete range of fresh poultry products - eggs, chicks, live chicken, dressed chicken, and feed. Quality products from Naju Poultry in Kwanza, Kenya.">
@@ -9,9 +10,16 @@
     <meta property="og:title" content="Products - Naju Poultry">
     <meta property="og:description" content="Browse our complete range of fresh poultry products">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://najupoultry.co.ke/products.html">
-    <meta property="og:image" content="https://najupoultry.co.ke/images/products-og.jpg">
-    <link rel="canonical" href="https://najupoultry.co.ke/products.html">
+    <meta property="og:url" content="https://naju-smoky.vercel.app/products.html">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/images/products-og.jpg">
+    <link rel="canonical" href="https://naju-smoky.vercel.app/products.html">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Naju Poultry">
+    <meta name="mobile-web-app-capable" content="yes">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://www.gstatic.com">
@@ -277,7 +285,7 @@
                         </li>
                         <li class="flex items-center hover:text-white transition-colors duration-300">
                             <i class="fas fa-envelope mr-2"></i>
-                            <a href="mailto:info@najupoultry.co.ke">info@najupoultry.co.ke</a>
+                            <a href="mailto:najupoultry@gmail.com">najupoultry@gmail.com</a>
                         </li>
                     </ul>
                 </div>
@@ -371,7 +379,7 @@
                         .from('products')
                         .select('*');
                     
-                    if (!error && data && data.length > 0) {
+                    if (!error && data) {
                         allProducts = data.map(p => ({ ...p, image: p.image_url || getCategoryEmoji(p.category) }));
                         renderProducts(allProducts);
                         loading.classList.add('hidden');
@@ -379,33 +387,13 @@
                     }
                 }
                 
-                // Fallback to mock data
-                throw new Error('No products found in Supabase');
+                renderProducts([]);
+                loading.classList.add('hidden');
                 
             } catch (error) {
                 console.error('Naju Poultry Products: Error loading products:', error);
-                
-                // Use fallback products
-                allProducts = [
-                    { id: 1, name: 'Fresh Kienyeji Eggs', price: 450, unit: 'dozen', category: 'eggs', stock: 50, description: 'Farm-fresh indigenous eggs from free-range chickens', image: '🥚' },
-                    { id: 2, name: 'Fresh Brown Eggs', price: 420, unit: 'dozen', category: 'eggs', stock: 45, description: 'Premium brown eggs from healthy hens', image: '🥚' },
-                    { id: 3, name: 'Day-Old Kienyeji Chicks', price: 120, unit: 'bird', category: 'chicks', stock: 100, description: 'Healthy day-old indigenous chicks', image: '🐥' },
-                    { id: 4, name: 'Day-Old Broiler Chicks', price: 100, unit: 'bird', category: 'chicks', stock: 80, description: 'Quality day-old broiler chicks for meat production', image: '🐥' },
-                    { id: 5, name: 'Live Kienyeji Chicken', price: 800, unit: 'kg', category: 'live', stock: 30, description: 'Fresh live indigenous chickens', image: '🐓' },
-                    { id: 6, name: 'Live Broiler Chicken', price: 650, unit: 'kg', category: 'live', stock: 25, description: 'Healthy live broiler chickens', image: '🐓' },
-                    { id: 7, name: 'Dressed Kienyeji Chicken', price: 850, unit: 'kg', category: 'dressed', stock: 25, description: 'Cleaned and dressed indigenous chicken', image: '🍗' },
-                    { id: 8, name: 'Dressed Broiler Chicken', price: 700, unit: 'kg', category: 'dressed', stock: 20, description: 'Cleaned and dressed broiler chicken', image: '🍗' },
-                    { id: 9, name: 'Chick Starter Mash', price: 2800, unit: '50kg bag', category: 'feed', stock: 15, description: 'Nutritious starter feed for chicks', image: '🌾' },
-                    { id: 10, name: 'Growers Mash', price: 2600, unit: '50kg bag', category: 'feed', stock: 12, description: 'Balanced grower feed for growing chickens', image: '🌾' },
-                    { id: 11, name: 'Layers Mash', price: 2900, unit: '50kg bag', category: 'feed', stock: 10, description: 'Specialized feed for laying hens', image: '🌾' },
-                    { id: 12, name: 'Finisher Feed', price: 2500, unit: '50kg bag', category: 'feed', stock: 8, description: 'High-energy finisher feed for broilers', image: '🌾' }
-                ];
-
-                // Simulate loading delay for better UX
-                setTimeout(() => {
-                    renderProducts(allProducts);
-                    loading.classList.add('hidden');
-                }, 800);
+                loading.classList.add('hidden');
+                document.getElementById('products-grid').innerHTML = '<div class="col-span-full text-center text-gray-500 py-8">Failed to load products. Please try again later.</div>';
             }
         }
 
@@ -439,8 +427,9 @@
 
         // Create enhanced product card
         function createProductCard(product) {
-            const stockStatus = product.stock > 20 ? 'In Stock' : product.stock > 0 ? 'Limited' : 'Out of Stock';
-            const stockColor = product.stock > 20 ? 'text-green-600' : product.stock > 0 ? 'text-orange-600' : 'text-red-600';
+            const isOutOfStock = product.stock <= 0;
+            const stockStatus = isOutOfStock ? 'Out of Stock' : product.stock > 20 ? 'In Stock' : 'Limited';
+            const stockColor = isOutOfStock ? 'text-red-600' : product.stock > 20 ? 'text-green-600' : 'text-orange-600';
             const productImage = product.image || getCategoryEmoji(product.category);
             
             return `
@@ -448,7 +437,7 @@
                     <div class="h-48 bg-gradient-to-br from-naju-cream to-naju-orange flex items-center justify-center relative overflow-hidden">
                         <span class="text-6xl animate-float">${productImage}</span>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
-                        ${product.stock <= 10 ? '<div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Limited</div>' : ''}
+                        ${isOutOfStock ? '<div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Out of Stock</div>' : product.stock <= 10 ? '<div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Limited</div>' : ''}
                     </div>
                     <div class="p-4">
                         <h3 class="font-bold text-lg text-naju-brown mb-2 group-hover:text-naju-orange transition-colors duration-300">${product.name}</h3>
@@ -463,8 +452,8 @@
                         </p>
                         <a href="https://wa.me/254724442020?text=Hello%20Naju,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" 
                            target="_blank" 
-                           class="w-full bg-naju-orange hover:bg-orange-500 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105 group relative overflow-hidden">
-                            <span class="relative z-10"><i class="fab fa-whatsapp mr-2"></i>Inquire</span>
+                           class="w-full font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105 group relative overflow-hidden ${isOutOfStock ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-naju-orange hover:bg-orange-500 text-white'}">
+                            <span class="relative z-10"><i class="fab fa-whatsapp mr-2"></i>${isOutOfStock ? 'Out of Stock' : 'Inquire'}</span>
                             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 animate-shimmer bg-shimmer-gradient"></div>
                         </a>
                     </div>

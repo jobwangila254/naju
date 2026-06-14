@@ -10,6 +10,7 @@
     { "src": "/about", "dest": "/about.html" },
     { "src": "/contact", "dest": "/contact.html" },
     { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/track", "dest": "/track.html" },
     { "src": "/offline", "dest": "/offline.html" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/404.html" }
@@ -66,6 +67,11 @@
     {
       "source": "/admin",
       "destination": "/admin.html",
+      "permanent": true
+    },
+    {
+      "source": "/track",
+      "destination": "/track.html",
       "permanent": true
     }
   ]

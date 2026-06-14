@@ -118,6 +118,43 @@ INSERT INTO products (name, description, price, category, unit, stock, image_url
     ('Layers Mash', 'Specialized feed for laying hens', 2900, 'feed', '50kg bag', 10, '🌾'),
     ('Finisher Feed', 'High-energy finisher feed for broilers', 2500, 'feed', '50kg bag', 8, '🌾');
 
+-- Orders table (for checkout from homepage cart)
+CREATE TABLE orders (
+    id BIGSERIAL PRIMARY KEY,
+    customer_name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    address TEXT NOT NULL,
+    items JSONB NOT NULL DEFAULT '[]',
+    total NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    payment_method TEXT DEFAULT 'cash' CHECK (payment_method IN ('cash', 'mpesa')),
+    mpesa_code TEXT DEFAULT '',
+    delivery_cost NUMERIC(10, 2) NOT NULL DEFAULT 0,
+    notes TEXT DEFAULT '',
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'confirmed', 'delivered', 'cancelled')),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can insert orders"
+    ON orders FOR INSERT
+    WITH CHECK (true);
+
+CREATE POLICY "Orders are readable by admins"
+    ON orders FOR SELECT
+    USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Orders are updatable by admins"
+    ON orders FOR UPDATE
+    USING (auth.role() = 'authenticated');
+
+CREATE POLICY "Orders are deletable by admins"
+    ON orders FOR DELETE
+    USING (auth.role() = 'authenticated');
+
+CREATE INDEX idx_orders_status ON orders(status);
+CREATE INDEX idx_orders_created_at ON orders(created_at DESC);
+
 -- Create index for faster queries
 CREATE INDEX idx_products_category ON products(category);
 CREATE INDEX idx_delivery_requests_status ON delivery_requests(status);

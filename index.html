@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>navigator.serviceWorker?.getRegistrations().then(r=>r.forEach(s=>s.unregister()))</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Naju Poultry - Fresh eggs, chicks, and chicken delivered to your doorstep in Kwanza, Kenya. Quality farm-fresh poultry products at affordable prices.">
@@ -10,18 +11,20 @@
     <meta property="og:title" content="Naju Poultry - Fresh from Our Farm to Your Table">
     <meta property="og:description" content="Quality eggs, chicks, and chicken, delivered to your doorstep in Kwanza, Kenya">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://najupoultry.co.ke">
-    <meta property="og:image" content="https://najupoultry.co.ke/images/og-image.jpg">
+    <meta property="og:url" content="https://naju-smoky.vercel.app">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/images/og-image.jpg">
     <meta property="og:locale" content="en_KE">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Naju Poultry - Fresh from Our Farm to Your Table">
     <meta name="twitter:description" content="Quality eggs, chicks, and chicken, delivered to your doorstep">
-    <meta name="twitter:image" content="https://najupoultry.co.ke/images/twitter-image.jpg">
+    <meta name="twitter:image" content="https://naju-smoky.vercel.app/images/twitter-image.jpg">
     <meta name="geo.region" content="KE-30">
     <meta name="geo.placename" content="Kwanza">
     <meta name="geo.position" content="1.0674;34.8979">
     <meta name="ICBM" content="1.0674,34.8979">
-    <link rel="canonical" href="https://najupoultry.co.ke">
+    <link rel="canonical" href="https://naju-smoky.vercel.app">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://www.gstatic.com">
@@ -38,12 +41,12 @@
     {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
-        "@id": "https://najupoultry.co.ke",
+        "@id": "https://naju-smoky.vercel.app",
         "name": "Naju Poultry",
         "description": "Fresh eggs, chicks, and chicken delivered to your doorstep in Kwanza, Kenya",
-        "url": "https://najupoultry.co.ke",
+        "url": "https://naju-smoky.vercel.app",
         "telephone": "+254724442020",
-        "email": "info@najupoultry.co.ke",
+        "email": "najupoultry@gmail.com",
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "Kwanza",
@@ -453,7 +456,7 @@
                         </li>
                         <li class="flex items-center hover:text-white transition-colors duration-300">
                             <i class="fas fa-envelope mr-2"></i>
-                            <a href="mailto:info@najupoultry.co.ke">info@najupoultry.co.ke</a>
+                            <a href="mailto:najupoultry@gmail.com">najupoultry@gmail.com</a>
                         </li>
                     </ul>
                 </div>
@@ -475,19 +478,6 @@
 
     <!-- Enhanced Firebase Configuration -->
     <script>
-        // Register Service Worker for PWA functionality
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(registration => {
-                        console.log('Naju Poultry: SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('Naju Poultry: SW registration failed: ', registrationError);
-                    });
-            });
-        }
-        
         // Request notification permission for order updates
         if ('Notification' in navigator && Notification.permission === 'default') {
             try {
@@ -575,30 +565,17 @@
                         .select('*')
                         .limit(4);
                     
-                    if (!error && data && data.length > 0) {
+                    if (!error && data) {
                         renderProducts(data);
                         return;
                     }
                 }
                 
-                // Fallback to mock data
-                throw new Error('No products found in Supabase');
+                renderProducts([]);
                 
             } catch (error) {
                 console.error('Error loading products:', error);
-                
-                // Use fallback products
-                const fallbackProducts = [
-                    { id: 1, name: 'Fresh Kienyeji Eggs', price: 450, unit: 'dozen', category: 'eggs', stock: 50, image: '🥚' },
-                    { id: 2, name: 'Day-Old Chicks', price: 120, unit: 'bird', category: 'chicks', stock: 100, image: '🐥' },
-                    { id: 3, name: 'Live Kienyeji Chicken', price: 800, unit: 'kg', category: 'live', stock: 30, image: '🐓' },
-                    { id: 4, name: 'Dressed Chicken', price: 650, unit: 'kg', category: 'dressed', stock: 25, image: '🍗' }
-                ];
-                
-                // Simulate loading delay for better UX
-                setTimeout(() => {
-                    renderProducts(fallbackProducts);
-                }, 800);
+                productsContainer.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8">Failed to load products.</div>';
             }
         }
         
@@ -652,8 +629,9 @@
         }
 
         function createProductCard(product) {
-            const stockStatus = product.stock > 20 ? 'In Stock' : 'Limited';
-            const stockColor = product.stock > 20 ? 'text-green-600' : 'text-orange-600';
+            const isOutOfStock = product.stock <= 0;
+            const stockStatus = isOutOfStock ? 'Out of Stock' : product.stock > 20 ? 'In Stock' : 'Limited';
+            const stockColor = isOutOfStock ? 'text-red-600' : product.stock > 20 ? 'text-green-600' : 'text-orange-600';
             const imgSrc = product.image_url || product.image || '';
             const isEmoji = imgSrc && imgSrc.length <= 2;
             const cartItem = getCartItem(product.id);
@@ -668,6 +646,7 @@
                     <div class="h-48 bg-gradient-to-br from-naju-cream to-naju-orange flex items-center justify-center relative overflow-hidden">
                         ${imageHtml}
                         <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                        ${isOutOfStock ? '<div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Out of Stock</div>' : ''}
                     </div>
                     <div class="p-4">
                         <h3 class="font-bold text-lg text-naju-brown mb-2 group-hover:text-naju-orange transition-colors duration-300">${product.name}</h3>
@@ -677,9 +656,9 @@
                             ${stockStatus}
                         </p>
                         <div class="flex gap-2">
-                            <button onclick="toggleCart(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, '${product.unit}', '${isEmoji ? (imgSrc || '🥚') : '🥚'}')" 
-                                    class="flex-1 bg-naju-green hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-all duration-300 transform hover:scale-105 text-sm">
-                                <i class="fas fa-cart-plus mr-1"></i><span id="cart-btn-text-${product.id}">${qty > 0 ? 'In Cart (' + qty + ')' : 'Add'}</span>
+                            <button ${isOutOfStock ? 'disabled' : ''} onclick="${isOutOfStock ? '' : `toggleCart(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, '${product.unit}', '${isEmoji ? (imgSrc || '🥚') : '🥚'}')`}" 
+                                    class="flex-1 font-bold py-2 px-4 rounded transition-all duration-300 text-sm ${isOutOfStock ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-naju-green hover:bg-green-700 text-white transform hover:scale-105'}">
+                                <i class="fas fa-cart-plus mr-1"></i>${isOutOfStock ? 'Unavailable' : qty > 0 ? 'In Cart (' + qty + ')' : 'Add'}
                             </button>
                             <a href="https://wa.me/254724442020?text=Hello%20Naju,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" 
                                target="_blank" 
@@ -758,6 +737,11 @@
                 <span>Total:</span>
                 <span id="cart-total" class="text-naju-green">KSh 0</span>
             </div>
+            <button onclick="openCheckout()" 
+                    class="w-full bg-naju-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+                <i class="fas fa-check-circle text-xl"></i>
+                Checkout
+            </button>
             <button onclick="sendCartToWhatsApp()" 
                     class="w-full bg-naju-orange hover:bg-orange-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
                 <i class="fab fa-whatsapp text-xl"></i>
@@ -767,6 +751,64 @@
                     class="w-full text-gray-500 hover:text-red-500 text-sm py-2 transition-colors">
                 <i class="fas fa-trash mr-1"></i>Clear Cart
             </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeCheckout()">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between p-4 border-b bg-naju-brown text-white rounded-t-lg">
+                <h2 class="text-xl font-bold"><i class="fas fa-shopping-bag mr-2"></i>Checkout</h2>
+                <button onclick="closeCheckout()" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            <div class="p-4">
+                <div id="checkout-summary" class="bg-gray-50 rounded-lg p-3 mb-4">
+                    <p class="font-semibold text-naju-brown mb-2">Order Summary</p>
+                    <div id="checkout-items" class="text-sm space-y-1"></div>
+                    <hr class="my-2">
+                    <p class="font-bold text-naju-green text-lg" id="checkout-total">KSh 0</p>
+                </div>
+                <form id="checkout-form" class="space-y-3">
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Full Name *</label>
+                        <input type="text" id="checkout-name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Phone Number *</label>
+                        <input type="tel" id="checkout-phone" required placeholder="e.g. 0712345678" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Delivery Address *</label>
+                        <textarea id="checkout-address" required rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Payment Method</label>
+                        <div class="flex gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-3 py-2 rounded-lg border has-[:checked]:border-naju-green has-[:checked]:bg-green-50 flex-1">
+                                <input type="radio" name="checkout-payment" value="mpesa" checked onchange="toggleCheckoutMpesa(true)">
+                                <span><i class="fas fa-mobile-alt text-green-600 mr-1"></i>M-Pesa</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-3 py-2 rounded-lg border has-[:checked]:border-naju-green has-[:checked]:bg-green-50 flex-1">
+                                <input type="radio" name="checkout-payment" value="cash" onchange="toggleCheckoutMpesa(false)">
+                                <span><i class="fas fa-money-bill text-orange-600 mr-1"></i>Cash</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="checkout-mpesa-section">
+                        <p class="text-xs text-gray-500 mb-1">Send payment to <strong>Lipa na M-Pesa Till: 123456</strong> — Naju Poultry</p>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">M-Pesa Confirmation Code</label>
+                        <input type="text" id="checkout-mpesa-code" placeholder="e.g. QWE123R45" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Additional Notes</label>
+                        <textarea id="checkout-notes" rows="2" placeholder="Delivery instructions, landmarks, etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm"></textarea>
+                    </div>
+                    <button type="submit" id="checkout-submit" class="w-full bg-naju-green hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-check mr-2"></i>Place Order
+                    </button>
+                    <p class="text-xs text-gray-400 text-center">You'll receive an order confirmation and can track your delivery</p>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -903,6 +945,69 @@
             document.getElementById('cart-overlay').classList.remove('open');
             document.body.style.overflow = '';
         }
+
+        // ===== Checkout =====
+        function toggleCheckoutMpesa(show) {
+            document.getElementById('checkout-mpesa-section').style.display = show ? '' : 'none';
+        }
+
+        function openCheckout() {
+            const cart = getCart();
+            if (cart.length === 0) { alert('Your cart is empty!'); return; }
+            let html = '', total = 0;
+            cart.forEach(item => {
+                const t = item.price * item.quantity;
+                total += t;
+                html += `<div class="flex justify-between"><span>${item.name} × ${item.quantity}</span><span>KSh ${t.toLocaleString()}</span></div>`;
+            });
+            document.getElementById('checkout-items').innerHTML = html;
+            document.getElementById('checkout-total').textContent = 'KSh ' + total.toLocaleString();
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            toggleCheckoutMpesa(true);
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.getElementById('checkout-form').reset();
+        }
+
+        document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!sb) { alert('System unavailable. Please try again.'); return; }
+            const cart = getCart();
+            if (cart.length === 0) { alert('Your cart is empty!'); return; }
+
+            const btn = document.getElementById('checkout-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Placing order...';
+
+            try {
+                const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+                const { error } = await sb.from('orders').insert({
+                    customer_name: document.getElementById('checkout-name').value,
+                    phone: document.getElementById('checkout-phone').value,
+                    address: document.getElementById('checkout-address').value,
+                    items: JSON.stringify(cart.map(i => ({ id: i.id, name: i.name, price: i.price, unit: i.unit, quantity: i.quantity }))),
+                    total: total,
+                    payment_method: document.querySelector('input[name="checkout-payment"]:checked').value,
+                    mpesa_code: document.getElementById('checkout-mpesa-code').value || null,
+                    notes: document.getElementById('checkout-notes').value || '',
+                    status: 'pending'
+                });
+                if (error) throw error;
+
+                saveCart([]);
+                updateCartUI();
+                closeCheckout();
+                alert('Order placed successfully! We will contact you shortly.\n\nTrack your order using your phone number.');
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Failed to place order. Please try again or contact us via WhatsApp.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i>Place Order';
+            }
+        });
 
         function sendCartToWhatsApp() {
             const cart = getCart();

@@ -13,9 +13,9 @@
 //    - Headers: Content-Type: application/json
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
-const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'info@najupoultry.co.ke';
-const FROM_EMAIL = process.env.FROM_EMAIL || 'naju@notifications.najupoultry.co.ke';
-const SITE_URL = process.env.SITE_URL || 'https://najupoultry.co.ke';
+const NOTIFY_EMAIL = process.env.NOTIFY_EMAIL || 'najupoultry@gmail.com';
+const FROM_EMAIL = process.env.FROM_EMAIL || 'naju@notifications.naju-smoky.vercel.app';
+const SITE_URL = process.env.SITE_URL || 'https://naju-smoky.vercel.app';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {

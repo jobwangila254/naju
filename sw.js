@@ -1,5 +1,5 @@
-const CACHE_NAME = 'najupoultry-v2.0.0';
-const STATIC_CACHE = 'najupoultry-static-v1';
+const CACHE_NAME = 'najupoultry-v2.0.1';
+const STATIC_CACHE = 'najupoultry-static-v2';
 const urlsToCache = [
   '/',
   '/index.html',
