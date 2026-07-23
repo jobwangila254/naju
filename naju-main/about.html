@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>navigator.serviceWorker?.getRegistrations().then(r=>r.forEach(s=>s.unregister()))</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Naju Poultry's story, mission, and commitment to quality poultry farming in Kwanza, Kenya. Serving Kitale, Eldoret, Nakuru, Nairobi since 2018.">
+    <meta property="og:title" content="About Us - Naju Poultry">
+    <meta property="og:description" content="Learn about Naju Poultry's story, mission, and commitment to quality poultry farming in Kwanza, Trans Nzoia, Kenya.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://naju-smoky.vercel.app/about.html">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/images/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Us - Naju Poultry">
+    <meta name="twitter:description" content="Learn about Naju Poultry's story, mission, and commitment to quality poultry farming in Kwanza, Kenya.">
+    <link rel="canonical" href="https://naju-smoky.vercel.app/about.html">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Naju Poultry">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>About Us - Naju Poultry - Kwanza, Kenya</title>
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-naju-cream">
+    <!-- Skip to content -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-naju-green focus:text-white focus:px-4 focus:py-2 focus:rounded focus:font-bold">
+        Skip to main content
+    </a>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300" role="navigation" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex-shrink-0 flex items-center group" aria-label="Naju Poultry Home">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2 transform transition-transform duration-300 group-hover:rotate-12"></i>
+                        <span class="font-bold text-xl text-naju-brown group-hover:text-naju-orange transition-colors duration-300">NAJU</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-naju-brown hover:text-naju-orange font-medium">Home</a>
+                    <a href="products.html" class="text-naju-brown hover:text-naju-orange font-medium">Products</a>
+                    <a href="delivery.html" class="text-naju-brown hover:text-naju-orange font-medium">Delivery</a>
+                    <a href="about.html" class="text-naju-orange font-medium">About</a>
+                    <a href="contact.html" class="text-naju-brown hover:text-naju-orange font-medium">Contact</a>
+                    <a href="track.html" class="text-naju-brown hover:text-naju-orange font-medium">Track</a>
+                    <button id="dark-toggle" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 text-lg ml-2" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-naju-orange focus:ring-offset-2 rounded-lg p-2" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Home</a>
+                <a href="products.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Products</a>
+                <a href="delivery.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Delivery</a>
+                <a href="about.html" class="block px-3 py-2 text-naju-orange font-medium">About</a>
+                <a href="contact.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Contact</a>
+                <a href="track.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Track</a>
+                <button id="dark-toggle-mobile" class="w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange font-medium flex items-center gap-2">
+                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section id="main-content" class="bg-gradient-to-r from-naju-green to-naju-brown text-white py-16" tabindex="-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">About Naju Poultry</h1>
+            <p class="text-xl text-naju-cream">Our story, mission, and commitment to quality</p>
+        </div>
+    </section>
+
+    <!-- Our Story -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-6">Our Story</h2>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        Naju Poultry began as a small family farm in Kwanza sub-location with a simple mission: to provide fresh, healthy, and affordable poultry products to our local community. What started with just a few chickens has grown into a trusted name in poultry farming, serving thousands of satisfied customers across Kitale, Eldoret, Nakuru, Nairobi, and surrounding regions.
+                    </p>
+                    <p class="text-gray-600 mb-4 leading-relaxed">
+                        Founded in 2018, we've spent over 8 years perfecting our farming practices, investing in modern technology while maintaining traditional farming values. Our commitment to quality has never wavered, and today we're proud to be one of the leading suppliers of fresh eggs, healthy chicks, and premium chicken products in the region.
+                    </p>
+                    <p class="text-gray-600 leading-relaxed">
+                        Every product that leaves our farm carries our promise of freshness, quality, and care. We believe that good food starts with good farming, and that's exactly what we deliver to your table.
+                    </p>
+                </div>
+                
+                <div class="relative rounded-lg overflow-hidden shadow-xl h-72 sm:h-96">
+                    <img src="https://images.unsplash.com/photo-1604848698035-8bf4daa1c9a3?w=600&q=80" 
+                         alt="Naju Poultry Farm - Free-range chickens on our farm in Kwanza" 
+                         class="w-full h-full object-cover rounded-lg"
+                         loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <p class="text-white font-semibold text-lg">Our Farm in Kwanza</p>
+                        <p class="text-white/80 text-sm">Trans Nzoia County</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Values -->
+    <section class="py-16 bg-naju-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4">Our Mission & Values</h2>
+                <p class="text-gray-600 text-lg">The principles that guide everything we do</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="bg-naju-green text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-heart text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-3">Quality First</h3>
+                    <p class="text-gray-600">We never compromise on quality. From feed to final product, every step is carefully monitored to ensure the highest standards.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="bg-naju-orange text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-hand-holding-heart text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-3">Customer Care</h3>
+                    <p class="text-gray-600">Our customers are family. We go above and beyond to ensure satisfaction with every purchase and delivery.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="bg-naju-brown text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-leaf text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-3">Sustainable Farming</h3>
+                    <p class="text-gray-600">We practice sustainable farming methods that protect the environment and ensure the welfare of our animals.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="bg-green-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-3">Food Safety</h3>
+                    <p class="text-gray-600">We follow strict food safety protocols and maintain the highest hygiene standards throughout our operations.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="bg-orange-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-users text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-3">Community Focus</h3>
+                            <p class="text-gray-600">We're committed to supporting our local community and contributing to the growth of agriculture in Kenya.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <div class="bg-yellow-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-award text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-3">Excellence</h3>
+                    <p class="text-gray-600">We continuously improve our processes and adopt best practices to deliver excellence in every aspect of our business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="py-16 bg-gradient-to-r from-naju-green to-naju-brown text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">8+</div>
+                    <p class="text-naju-cream">Years in Business</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">50K+</div>
+                    <p class="text-naju-cream">Happy Customers</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">100K+</div>
+                    <p class="text-naju-cream">Products Delivered</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">15+</div>
+                    <p class="text-naju-cream">Delivery Areas</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4">Experience the Naju Difference</h2>
+            <p class="text-xl text-gray-600 mb-8">Join thousands of satisfied customers who trust us for fresh, quality poultry products</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="products.html" class="bg-naju-green hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                    <i class="fas fa-shopping-basket mr-2"></i>Shop Our Products
+                </a>
+                <a href="contact.html" class="bg-naju-orange hover:bg-orange-500 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                    <i class="fas fa-phone mr-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-naju-brown text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">NAJU</span>
+                    </div>
+                    <p class="text-naju-cream">Fresh from our farm to your table</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="products.html" class="text-naju-cream hover:text-white">Products</a></li>
+                        <li><a href="delivery.html" class="text-naju-cream hover:text-white">Delivery</a></li>
+                        <li><a href="about.html" class="text-naju-cream hover:text-white">About Us</a></li>
+                        <li><a href="contact.html" class="text-naju-cream hover:text-white">Contact</a></li>
+                        <li><a href="track.html" class="text-naju-cream hover:text-white">Track Order</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li><i class="fas fa-phone mr-2"></i>0724 442 020</li>
+                        <li><i class="fab fa-whatsapp mr-2"></i>0724 442 020</li>
+                        <li><i class="fas fa-envelope mr-2"></i>najupoultry@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Business Hours</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li>24/7 - Always Available</li>
+                        <li>Emergency Orders Welcome</li>
+                        <li>Fast Response Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-naju-orange mt-8 pt-8 text-center text-naju-cream">
+                <p>&copy; 2026 Naju Poultry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                mobileMenu.classList.toggle('hidden');
+                this.setAttribute('aria-expanded', !isExpanded);
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-bars');
+                    icon.classList.toggle('fa-times');
+                }
+            });
+            document.addEventListener('click', function(event) {
+                if (!menuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                    menuBtn.setAttribute('aria-expanded', 'false');
+                    const icon = menuBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('fa-bars');
+                        icon.classList.remove('fa-times');
+                    }
+                }
+            });
+        }
+
+        // Dark Mode Toggle
+        (function() {
+            const html = document.documentElement;
+            const stored = localStorage.getItem('naju_dark');
+            if (stored === 'true') html.classList.add('dark');
+
+            function setIcon(icon) {
+                document.querySelectorAll('#dark-toggle i, #dark-toggle-mobile i').forEach(el => {
+                    el.className = 'fas ' + (icon === 'moon' ? 'fa-moon' : 'fa-sun');
+                });
+                document.querySelectorAll('#dark-toggle-mobile span').forEach(el => {
+                    el.textContent = icon === 'moon' ? 'Dark Mode' : 'Light Mode';
+                });
+            }
+
+            function toggle() {
+                const isDark = html.classList.toggle('dark');
+                localStorage.setItem('naju_dark', isDark);
+                setIcon(isDark ? 'sun' : 'moon');
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                setIcon(html.classList.contains('dark') ? 'sun' : 'moon');
+                const btns = document.querySelectorAll('#dark-toggle, #dark-toggle-mobile');
+                btns.forEach(btn => btn.addEventListener('click', toggle));
+            });
+        })();
+    </script>
+</body>
+</html>

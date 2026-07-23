@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>navigator.serviceWorker?.getRegistrations().then(r=>r.forEach(s=>s.unregister()))</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Naju Poultry - Fresh eggs, chicks, and chicken delivered to your doorstep in Kwanza, Kenya. Quality farm-fresh poultry products at affordable prices.">
+    <meta name="keywords" content="poultry, eggs, chicks, chicken, kienyeji, kwanza, kenya, farm fresh, delivery, naju poultry">
+    <meta name="author" content="Naju Poultry">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Naju Poultry - Fresh from Our Farm to Your Table">
+    <meta property="og:description" content="Quality eggs, chicks, and chicken, delivered to your doorstep in Kwanza, Kenya">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://naju-smoky.vercel.app">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/images/og-image.jpg">
+    <meta property="og:locale" content="en_KE">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Naju Poultry - Fresh from Our Farm to Your Table">
+    <meta name="twitter:description" content="Quality eggs, chicks, and chicken, delivered to your doorstep">
+    <meta name="twitter:image" content="https://naju-smoky.vercel.app/images/twitter-image.jpg">
+    <meta name="geo.region" content="KE-30">
+    <meta name="geo.placename" content="Kwanza">
+    <meta name="geo.position" content="1.0674;34.8979">
+    <meta name="ICBM" content="1.0674,34.8979">
+    <link rel="canonical" href="https://naju-smoky.vercel.app">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="preconnect" href="https://www.gstatic.com">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Naju Poultry">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="msapplication-TileColor" content="#8B4513">
+    <meta name="msapplication-config" content="/browserconfig.xml">
+    <title>Naju Poultry - Fresh from Our Farm to Your Table - Kwanza, Kenya</title>
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": "https://naju-smoky.vercel.app",
+        "name": "Naju Poultry",
+        "description": "Fresh eggs, chicks, and chicken delivered to your doorstep in Kwanza, Kenya",
+        "url": "https://naju-smoky.vercel.app",
+        "telephone": "+254724442020",
+        "email": "najupoultry@gmail.com",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Kwanza",
+            "addressRegion": "KE",
+            "addressCountry": "Kenya"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "1.0674",
+            "longitude": "34.8979"
+        },
+        "serviceAvailability": [
+            "24/7 - Always Available"
+        ],
+        "priceRange": "KSh120-KSh800",
+        "sameAs": [
+            "https://wa.me/254724442020"
+        ],
+        "offers": [
+            {
+                "@type": "Offer",
+                "itemOffered": {
+                    "@type": "Product",
+                    "name": "Fresh Kienyeji Eggs",
+                    "category": "Eggs"
+                },
+                "price": "450",
+                "priceCurrency": "KES",
+                "availability": "https://schema.org/InStock"
+            },
+            {
+                "@type": "Offer",
+                "itemOffered": {
+                    "@type": "Product",
+                    "name": "Day-Old Chicks",
+                    "category": "Chicks"
+                },
+                "price": "120",
+                "priceCurrency": "KES",
+                "availability": "https://schema.org/InStock"
+            }
+        ]
+    }
+    </script>
+    
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/supabase.js"></script>
+</head>
+<body class="bg-naju-cream">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300" role="navigation" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex-shrink-0 flex items-center group" aria-label="Naju Poultry Home">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2 transform transition-transform duration-300 group-hover:rotate-12"></i>
+                        <span class="font-bold text-xl text-naju-brown group-hover:text-naju-orange transition-colors duration-300">NAJU</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-naju-brown hover:text-naju-orange font-medium transition-all duration-300 hover:scale-105 relative group">
+                        Home
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="products.html" class="text-naju-brown hover:text-naju-orange font-medium transition-all duration-300 hover:scale-105 relative group">
+                        Products
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="delivery.html" class="text-naju-brown hover:text-naju-orange font-medium transition-all duration-300 hover:scale-105 relative group">
+                        Delivery
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="about.html" class="text-naju-brown hover:text-naju-orange font-medium transition-all duration-300 hover:scale-105 relative group">
+                        About
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="contact.html" class="text-naju-brown hover:text-naju-orange font-medium transition-all duration-300 hover:scale-105 relative group">
+                        Contact
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="track.html" class="text-naju-brown hover:text-naju-orange font-medium transition-all duration-300 hover:scale-105 relative group">
+                        Track
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-naju-orange transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <button id="dark-toggle" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 text-lg ml-2" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-naju-orange focus:ring-offset-2 rounded-lg p-2" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t animate-slide-up" role="menu">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Home</a>
+                <a href="products.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Products</a>
+                <a href="delivery.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Delivery</a>
+                <a href="about.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">About</a>
+                <a href="contact.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Contact</a>
+                <a href="track.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300" role="menuitem">Track</a>
+                <button id="dark-toggle-mobile" class="w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange hover:bg-naju-cream font-medium rounded-lg transition-all duration-300 flex items-center gap-2">
+                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative bg-gradient-to-br from-naju-green to-naju-brown text-white overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-10 left-10 w-20 h-20 bg-white opacity-10 rounded-full animate-float"></div>
+            <div class="absolute top-20 right-20 w-16 h-16 bg-naju-orange opacity-20 rounded-full animate-float" style="animation-delay: 1s"></div>
+            <div class="absolute bottom-20 left-1/4 w-24 h-24 bg-white opacity-5 rounded-full animate-float" style="animation-delay: 2s"></div>
+            <div class="absolute bottom-10 right-1/3 w-12 h-12 bg-naju-orange opacity-15 rounded-full animate-float" style="animation-delay: 1.5s"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
+            <div class="text-center animate-slide-up">
+                <div class="mb-6">
+                    <i class="fas fa-egg text-6xl md:text-8xl text-naju-orange animate-bounce-in mb-4 inline-block"></i>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 animate-fade-in">
+                    Naju Poultry – Fresh from Our Farm to Your Table
+                </h1>
+                <p class="text-xl md:text-2xl mb-8 text-naju-cream animate-fade-in" style="animation-delay: 0.2s">
+                    Quality eggs, chicks, and chicken, delivered to your doorstep
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12 animate-slide-up" style="animation-delay: 0.4s">
+                    <a href="https://wa.me/254724442020" target="_blank" class="group bg-naju-orange hover:bg-orange-500 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-xl relative overflow-hidden">
+                        <span class="relative z-10"><i class="fab fa-whatsapp mr-2"></i>Order via WhatsApp</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 animate-shimmer bg-shimmer-gradient"></div>
+                    </a>
+                    <a href="tel:+254724442020" class="group bg-white hover:bg-gray-100 text-naju-brown font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-xl relative overflow-hidden">
+                        <span class="relative z-10"><i class="fas fa-phone mr-2"></i>Call Us</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-naju-orange to-transparent opacity-0 group-hover:opacity-10 animate-shimmer bg-shimmer-gradient"></div>
+                    </a>
+                </div>
+                
+                <!-- Trust Indicators -->
+                <div class="flex flex-wrap justify-center gap-8 text-sm animate-fade-in" style="animation-delay: 0.6s">
+                    <div class="flex items-center">
+                        <i class="fas fa-check-circle text-naju-orange mr-2"></i>
+                        <span>Farm Fresh</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-truck text-naju-orange mr-2"></i>
+                        <span>Fast Delivery</span>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-shield-alt text-naju-orange mr-2"></i>
+                        <span>Quality Guaranteed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3-Step Process -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4 animate-fade-in">How It Works</h2>
+                <p class="text-gray-600 text-lg animate-fade-in" style="animation-delay: 0.2s">Simple process to get fresh poultry products</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.3s">
+                    <div class="bg-naju-green text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                        <i class="fas fa-search text-2xl"></i>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-xl font-bold text-naju-brown mb-2 group-hover:text-naju-green transition-colors duration-300">Browse</h3>
+                        <p class="text-gray-600">Explore our wide range of fresh poultry products</p>
+                        <div class="mt-4 text-naju-green opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.4s">
+                    <div class="bg-naju-orange text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                        <i class="fas fa-phone text-2xl"></i>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-xl font-bold text-naju-brown mb-2 group-hover:text-naju-orange transition-colors duration-300">Contact</h3>
+                        <p class="text-gray-600">Reach out via WhatsApp or phone to place your order</p>
+                        <div class="mt-4 text-naju-orange opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.5s">
+                    <div class="bg-naju-brown text-white rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg">
+                        <i class="fas fa-truck text-2xl"></i>
+                    </div>
+                    <div class="bg-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-xl font-bold text-naju-brown mb-2 group-hover:text-naju-brown transition-colors duration-300">We Deliver</h3>
+                        <p class="text-gray-600">Fresh products delivered right to your doorstep</p>
+                        <div class="mt-4 text-naju-brown opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="py-16 bg-naju-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4 animate-fade-in">Featured Products</h2>
+                <p class="text-gray-600 text-lg animate-fade-in" style="animation-delay: 0.2s">Our most popular fresh poultry products</p>
+            </div>
+            <div id="featured-products" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Loading Skeleton -->
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+            </div>
+            <div class="text-center mt-8 animate-slide-up" style="animation-delay: 0.4s">
+                <a href="products.html" class="group inline-block bg-naju-green hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-xl relative overflow-hidden">
+                    <span class="relative z-10">View All Products <i class="fas fa-arrow-right ml-2"></i></span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 animate-shimmer bg-shimmer-gradient"></div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Naju -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4 animate-fade-in">Why Choose Naju Poultry</h2>
+                <p class="text-gray-600 text-lg animate-fade-in" style="animation-delay: 0.2s">We're committed to quality and freshness</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.3s">
+                    <div class="text-naju-green text-4xl mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <div class="bg-gradient-to-br from-naju-cream to-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-xl font-bold text-naju-brown mb-2 group-hover:text-naju-green transition-colors duration-300">Fresh</h3>
+                        <p class="text-gray-600">Farm-fresh products delivered daily</p>
+                        <div class="mt-4 flex justify-center">
+                            <div class="w-12 h-1 bg-naju-green rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.4s">
+                    <div class="text-naju-orange text-4xl mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="bg-gradient-to-br from-naju-cream to-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-xl font-bold text-naju-brown mb-2 group-hover:text-naju-orange transition-colors duration-300">Local</h3>
+                        <p class="text-gray-600">Supporting local farmers and community</p>
+                        <div class="mt-4 flex justify-center">
+                            <div class="w-12 h-1 bg-naju-orange rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.5s">
+                    <div class="text-naju-brown text-4xl mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="bg-gradient-to-br from-naju-cream to-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-xl font-bold text-naju-brown mb-2 group-hover:text-naju-brown transition-colors duration-300">Trusted</h3>
+                        <p class="text-gray-600">Quality you can count on every time</p>
+                        <div class="mt-4 flex justify-center">
+                            <div class="w-12 h-1 bg-naju-brown rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center group animate-slide-up" style="animation-delay: 0.6s">
+                    <div class="text-green-600 text-4xl mb-4 transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div class="bg-gradient-to-br from-naju-cream to-white rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                        <h3 class="text-xl font-bold text-naju-brown mb-2 group-hover:text-green-600 transition-colors duration-300">Affordable</h3>
+                        <p class="text-gray-600">Competitive prices for premium quality</p>
+                        <div class="mt-4 flex justify-center">
+                            <div class="w-12 h-1 bg-green-600 rounded-full transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="relative py-16 bg-gradient-to-r from-naju-green to-naju-brown text-white overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-10 left-10 w-16 h-16 bg-white opacity-5 rounded-full animate-float"></div>
+            <div class="absolute top-20 right-20 w-12 h-12 bg-naju-orange opacity-10 rounded-full animate-float" style="animation-delay: 1s"></div>
+            <div class="absolute bottom-20 left-1/3 w-20 h-20 bg-white opacity-5 rounded-full animate-float" style="animation-delay: 2s"></div>
+            <div class="absolute bottom-10 right-1/4 w-8 h-8 bg-naju-orange opacity-15 rounded-full animate-float" style="animation-delay: 1.5s"></div>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4 animate-fade-in">Ready to Order Fresh Poultry?</h2>
+            <p class="text-xl mb-8 text-naju-cream animate-fade-in" style="animation-delay: 0.2s">Contact us today and get fresh products delivered to your doorstep</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up" style="animation-delay: 0.4s">
+                <a href="https://wa.me/254724442020" target="_blank" class="group bg-naju-orange hover:bg-orange-500 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-xl relative overflow-hidden">
+                    <span class="relative z-10"><i class="fab fa-whatsapp mr-2"></i>WhatsApp Us</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 animate-shimmer bg-shimmer-gradient"></div>
+                </a>
+                <a href="tel:+254724442020" class="group bg-white hover:bg-gray-100 text-naju-brown font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-xl relative overflow-hidden">
+                    <span class="relative z-10"><i class="fas fa-phone mr-2"></i>Call Now</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-naju-orange to-transparent opacity-0 group-hover:opacity-10 animate-shimmer bg-shimmer-gradient"></div>
+                </a>
+                <a href="contact.html" class="group border-2 border-white hover:bg-white hover:text-naju-brown text-white font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-xl relative overflow-hidden">
+                    <span class="relative z-10"><i class="fas fa-envelope mr-2"></i>Contact Form</span>
+                    <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-10 animate-shimmer bg-shimmer-gradient"></div>
+                </a>
+            </div>
+            
+            <!-- Social Proof -->
+            <div class="mt-12 flex flex-wrap justify-center gap-8 text-sm animate-fade-in" style="animation-delay: 0.6s">
+                <div class="flex items-center">
+                    <i class="fas fa-users text-naju-orange mr-2"></i>
+                    <span>500+ Happy Customers</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-star text-naju-orange mr-2"></i>
+                    <span>4.9/5 Rating</span>
+                </div>
+                <div class="flex items-center">
+                    <i class="fas fa-clock text-naju-orange mr-2"></i>
+                    <span>Delivery</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-naju-brown text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="animate-fade-in">
+                    <a href="index.html" class="flex items-center mb-4 group">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2 transform transition-transform duration-300 group-hover:rotate-12"></i>
+                        <span class="font-bold text-xl group-hover:text-naju-orange transition-colors duration-300">NAJU</span>
+                    </a>
+                    <p class="text-naju-cream">Fresh from our farm to your table</p>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="https://wa.me/254724442020" target="_blank" class="text-naju-cream hover:text-naju-orange transition-colors duration-300" aria-label="WhatsApp">
+                            <i class="fab fa-whatsapp text-xl"></i>
+                        </a>
+                        <a href="https://facebook.com/najupoultry" target="_blank" class="text-naju-cream hover:text-naju-orange transition-colors duration-300" aria-label="Facebook">
+                            <i class="fab fa-facebook text-xl"></i>
+                        </a>
+                        <a href="https://instagram.com/najupoultry" target="_blank" class="text-naju-cream hover:text-naju-orange transition-colors duration-300" aria-label="Instagram">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://twitter.com/najupoultry" target="_blank" class="text-naju-cream hover:text-naju-orange transition-colors duration-300" aria-label="Twitter">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.1s">
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="products.html" class="text-naju-cream hover:text-white transition-colors duration-300">Products</a></li>
+                        <li><a href="delivery.html" class="text-naju-cream hover:text-white transition-colors duration-300">Delivery</a></li>
+                        <li><a href="about.html" class="text-naju-cream hover:text-white transition-colors duration-300">About Us</a></li>
+                        <li><a href="contact.html" class="text-naju-cream hover:text-white transition-colors duration-300">Contact</a></li>
+                        <li><a href="track.html" class="text-naju-cream hover:text-white transition-colors duration-300">Track Order</a></li>
+                    </ul>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.2s">
+                    <h4 class="font-bold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li class="flex items-center hover:text-white transition-colors duration-300">
+                            <i class="fas fa-phone mr-2"></i>
+                            <a href="tel:+254724442020">0724 442 020</a>
+                        </li>
+                        <li class="flex items-center hover:text-white transition-colors duration-300">
+                            <i class="fab fa-whatsapp mr-2"></i>
+                            <a href="https://wa.me/254724442020">0724 442 020</a>
+                        </li>
+                        <li class="flex items-center hover:text-white transition-colors duration-300">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <a href="mailto:najupoultry@gmail.com">najupoultry@gmail.com</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="animate-fade-in" style="animation-delay: 0.3s">
+                    <h4 class="font-bold mb-4">Business Hours</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li>24/7 - Always Available</li>
+                        <li>Emergency Orders Welcome</li>
+                        <li>Fast Response Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-naju-orange mt-8 pt-8 text-center text-naju-cream animate-fade-in" style="animation-delay: 0.4s">
+                <p>&copy; 2026 Naju Poultry. All rights reserved.</p>
+                <p class="mt-2 text-sm">Serving Kenya with fresh poultry products</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Enhanced Firebase Configuration -->
+    <script>
+        // Request notification permission for order updates
+        if ('Notification' in navigator && Notification.permission === 'default') {
+            try {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        console.log('Naju Poultry: Notification permission granted');
+                    }
+                });
+            } catch (e) {
+                console.log('Naju Poultry: Notification permission request skipped');
+            }
+        }
+        
+        // Performance monitoring
+        if (typeof PerformanceObserver !== 'undefined') {
+            const performanceObserver = new PerformanceObserver((list) => {
+                for (const entry of list.getEntries()) {
+                    if (entry.entryType === 'navigation') {
+                        console.log(`Naju Poultry: Page load time: ${entry.loadEventEnd - entry.loadEventStart}ms`);
+                    }
+                }
+            });
+            try { performanceObserver.observe({ entryTypes: ['navigation'] }); } catch (e) {}
+        }
+        
+        // Supabase configuration
+        let sb = null;
+        let sbInitialized = false;
+        
+        try {
+            sb = initSupabase();
+            if (sb) {
+                sbInitialized = true;
+                console.log('Naju Poultry: Supabase initialized successfully');
+            }
+        } catch (error) {
+            console.error('Naju Poultry: Supabase initialization failed:', error);
+        }
+
+        // Enhanced mobile menu toggle with accessibility
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                
+                mobileMenu.classList.toggle('hidden');
+                this.setAttribute('aria-expanded', !isExpanded);
+                
+                // Toggle icon
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-bars');
+                    icon.classList.toggle('fa-times');
+                }
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!mobileMenuButton.contains(event.target) && !mobileMenu.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    const icon = mobileMenuButton.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('fa-bars');
+                        icon.classList.remove('fa-times');
+                    }
+                }
+            });
+        }
+
+        // Enhanced product loading with lazy loading and error handling
+        async function loadFeaturedProducts() {
+            const productsContainer = document.getElementById('featured-products');
+            if (!productsContainer) return;
+            
+            try {
+                // Show loading state
+                productsContainer.innerHTML = createLoadingSkeletons();
+                
+                if (sbInitialized) {
+                    const { data, error } = await sb
+                        .from('products')
+                        .select('*')
+                        .limit(4);
+                    
+                    if (!error && data) {
+                        renderProducts(data);
+                        return;
+                    }
+                }
+                
+                renderProducts([]);
+                
+            } catch (error) {
+                console.error('Error loading products:', error);
+                productsContainer.innerHTML = '<div class="col-span-full text-center text-gray-500 py-8">Failed to load products.</div>';
+            }
+        }
+        
+        function createLoadingSkeletons() {
+            return `
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+                <div class="animate-pulse">
+                    <div class="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div class="bg-gray-200 h-4 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-6 rounded mb-2"></div>
+                    <div class="bg-gray-200 h-4 rounded"></div>
+                </div>
+            `;
+        }
+        
+        function renderProducts(products) {
+            const productsContainer = document.getElementById('featured-products');
+            if (!productsContainer) return;
+            
+            productsContainer.innerHTML = '';
+            
+            products.forEach((product, index) => {
+                const productCard = createProductCard(product);
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = productCard;
+                const card = tempDiv.firstElementChild;
+                
+                // Add staggered animation
+                setTimeout(() => {
+                    card.classList.add('animate-slide-up');
+                    productsContainer.appendChild(card);
+                }, index * 150);
+            });
+        }
+
+        function createProductCard(product) {
+            const isOutOfStock = product.stock <= 0;
+            const stockStatus = isOutOfStock ? 'Out of Stock' : product.stock > 20 ? 'In Stock' : 'Limited';
+            const stockColor = isOutOfStock ? 'text-red-600' : product.stock > 20 ? 'text-green-600' : 'text-orange-600';
+            const imgSrc = product.image_url || product.image || '';
+            const isEmoji = imgSrc && imgSrc.length <= 2;
+            const cartItem = getCartItem(product.id);
+            const qty = cartItem ? cartItem.quantity : 0;
+            
+            const imageHtml = isEmoji
+                ? `<span class="text-6xl animate-float">${imgSrc || '🥚'}</span>`
+                : `<img src="${imgSrc}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span class="text-6xl animate-float hidden">🥚</span>`;
+            
+            return `
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group">
+                    <div class="h-48 bg-gradient-to-br from-naju-cream to-naju-orange flex items-center justify-center relative overflow-hidden">
+                        ${imageHtml}
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent"></div>
+                        ${isOutOfStock ? '<div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">Out of Stock</div>' : ''}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-bold text-lg text-naju-brown mb-2 group-hover:text-naju-orange transition-colors duration-300">${product.name}</h3>
+                        <p class="text-2xl font-bold text-naju-green mb-2">KSh${product.price.toLocaleString()}/${product.unit}</p>
+                        <p class="${stockColor} text-sm mb-4 flex items-center">
+                            <span class="w-2 h-2 ${stockColor.replace('text', 'bg')} rounded-full mr-2"></span>
+                            ${stockStatus}
+                        </p>
+                        <div class="flex gap-2">
+                            <button ${isOutOfStock ? 'disabled' : ''} onclick="${isOutOfStock ? '' : `toggleCart(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, '${product.unit}', '${isEmoji ? (imgSrc || '🥚') : '🥚'}')`}" 
+                                    class="flex-1 font-bold py-2 px-4 rounded transition-all duration-300 text-sm ${isOutOfStock ? 'bg-gray-300 text-gray-500 cursor-not-allowed' : 'bg-naju-green hover:bg-green-700 text-white transform hover:scale-105'}">
+                                <i class="fas fa-cart-plus mr-1"></i>${isOutOfStock ? 'Unavailable' : qty > 0 ? 'In Cart (' + qty + ')' : 'Add'}
+                            </button>
+                            <a href="https://wa.me/254724442020?text=Hello%20Naju,%20I'm%20interested%20in%20${encodeURIComponent(product.name)}" 
+                               target="_blank" 
+                               class="bg-naju-orange hover:bg-orange-500 text-white font-bold py-2 px-3 rounded transition-all duration-300 transform hover:scale-105 text-sm">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Intersection Observer for animations
+        let observer;
+        if (typeof IntersectionObserver !== 'undefined') {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+        }
+        
+        // Observe all sections for animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load products
+            loadFeaturedProducts();
+            
+            // Set up intersection observer for animations
+            if (observer) {
+                const sections = document.querySelectorAll('section');
+                sections.forEach(section => {
+                    observer.observe(section);
+                });
+            }
+            
+            // Add smooth scroll behavior
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+            window.__initDark();
+        });
+    </script>
+
+    <!-- Cart Overlay -->
+    <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden transition-opacity duration-300" onclick="closeCart()"></div>
+
+    <!-- Cart Panel -->
+    <div id="cart-panel" class="fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-naju-brown text-white">
+            <h2 class="text-xl font-bold"><i class="fas fa-shopping-cart mr-2"></i>Your Cart</h2>
+            <button onclick="closeCart()" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+        </div>
+        <div id="cart-items" class="flex-1 overflow-y-auto p-4">
+            <div class="text-center text-gray-500 mt-8">
+                <i class="fas fa-shopping-basket text-5xl mb-4 text-gray-300"></i>
+                <p class="text-lg">Your cart is empty</p>
+                <p class="text-sm mt-2">Browse our products and add items to get started</p>
+            </div>
+        </div>
+        <div id="cart-footer" class="hidden border-t border-gray-200 p-4 space-y-3 bg-gray-50">
+            <div class="flex justify-between text-lg font-bold">
+                <span>Total:</span>
+                <span id="cart-total" class="text-naju-green">KSh 0</span>
+            </div>
+            <button onclick="openCheckout()" 
+                    class="w-full bg-naju-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+                <i class="fas fa-check-circle text-xl"></i>
+                Checkout
+            </button>
+            <button onclick="sendCartToWhatsApp()" 
+                    class="w-full bg-naju-orange hover:bg-orange-500 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-2">
+                <i class="fab fa-whatsapp text-xl"></i>
+                Send Order via WhatsApp
+            </button>
+            <button onclick="clearCart()" 
+                    class="w-full text-gray-500 hover:text-red-500 text-sm py-2 transition-colors">
+                <i class="fas fa-trash mr-1"></i>Clear Cart
+            </button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkout-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4" onclick="if(event.target===this)closeCheckout()">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between p-4 border-b bg-naju-brown text-white rounded-t-lg">
+                <h2 class="text-xl font-bold"><i class="fas fa-shopping-bag mr-2"></i>Checkout</h2>
+                <button onclick="closeCheckout()" class="text-white hover:text-gray-200 text-2xl">&times;</button>
+            </div>
+            <div class="p-4">
+                <div id="checkout-summary" class="bg-gray-50 rounded-lg p-3 mb-4">
+                    <p class="font-semibold text-naju-brown mb-2">Order Summary</p>
+                    <div id="checkout-items" class="text-sm space-y-1"></div>
+                    <hr class="my-2">
+                    <p class="font-bold text-naju-green text-lg" id="checkout-total">KSh 0</p>
+                </div>
+                <form id="checkout-form" class="space-y-3">
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Full Name *</label>
+                        <input type="text" id="checkout-name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Phone Number *</label>
+                        <input type="tel" id="checkout-phone" required placeholder="e.g. 0712345678" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Delivery Address *</label>
+                        <textarea id="checkout-address" required rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Payment Method</label>
+                        <div class="flex gap-3">
+                            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-3 py-2 rounded-lg border has-[:checked]:border-naju-green has-[:checked]:bg-green-50 flex-1">
+                                <input type="radio" name="checkout-payment" value="mpesa" checked onchange="toggleCheckoutMpesa(true)">
+                                <span><i class="fas fa-mobile-alt text-green-600 mr-1"></i>M-Pesa</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-3 py-2 rounded-lg border has-[:checked]:border-naju-green has-[:checked]:bg-green-50 flex-1">
+                                <input type="radio" name="checkout-payment" value="cash" onchange="toggleCheckoutMpesa(false)">
+                                <span><i class="fas fa-money-bill text-orange-600 mr-1"></i>Cash</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="checkout-mpesa-section">
+                        <p class="text-xs text-gray-500 mb-1">Send payment to <strong>Lipa na M-Pesa Till: 123456</strong> — Naju Poultry</p>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">M-Pesa Confirmation Code</label>
+                        <input type="text" id="checkout-mpesa-code" placeholder="e.g. QWE123R45" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold text-sm mb-1">Additional Notes</label>
+                        <textarea id="checkout-notes" rows="2" placeholder="Delivery instructions, landmarks, etc." class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green text-sm"></textarea>
+                    </div>
+                    <button type="submit" id="checkout-submit" class="w-full bg-naju-green hover:bg-green-700 text-white font-bold py-3 rounded-lg transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-check mr-2"></i>Place Order
+                    </button>
+                    <p class="text-xs text-gray-400 text-center">You'll receive an order confirmation and can track your delivery</p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Cart Button -->
+    <button id="cart-fab" onclick="openCart()" 
+            class="fixed bottom-6 right-6 bg-naju-green hover:bg-green-700 text-white w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-110 z-30 hidden items-center justify-center">
+        <i class="fas fa-shopping-cart text-xl"></i>
+        <span id="cart-badge" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center font-bold">0</span>
+    </button>
+
+    <style>
+        #cart-panel.open { transform: translateX(0); }
+        #cart-overlay.open { display: block; }
+        .cart-item-enter { animation: slideInRight 0.3s ease-out; }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .qty-btn { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; transition: all 0.2s; }
+    </style>
+
+    <script>
+        // ===== WhatsApp Cart =====
+        const CART_KEY = 'naju_cart';
+        const WA_NUMBER = '254724442020';
+
+        function getCart() {
+            try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; }
+        }
+
+        function saveCart(cart) {
+            localStorage.setItem(CART_KEY, JSON.stringify(cart));
+        }
+
+        function getCartItem(productId) {
+            return getCart().find(item => item.id === productId);
+        }
+
+        function updateCartUI() {
+            const cart = getCart();
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const fab = document.getElementById('cart-fab');
+            const badge = document.getElementById('cart-badge');
+
+            if (count > 0) {
+                fab.classList.remove('hidden');
+                fab.classList.add('flex');
+                badge.textContent = count > 99 ? '99+' : count;
+            } else {
+                fab.classList.add('hidden');
+                fab.classList.remove('flex');
+            }
+
+            const container = document.getElementById('cart-items');
+            const footer = document.getElementById('cart-footer');
+
+            if (count === 0) {
+                container.innerHTML = '<div class="text-center text-gray-500 mt-8"><i class="fas fa-shopping-basket text-5xl mb-4 text-gray-300"></i><p class="text-lg">Your cart is empty</p><p class="text-sm mt-2">Browse our products and add items to get started</p></div>';
+                footer.classList.add('hidden');
+            } else {
+                let html = '';
+                let total = 0;
+                cart.forEach((item, idx) => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    html += `
+                        <div class="flex items-center gap-3 p-3 bg-white rounded-lg shadow-sm mb-2 cart-item-enter" style="animation-delay: ${idx * 0.05}s">
+                            <span class="text-3xl flex-shrink-0">${item.image || '🥚'}</span>
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold text-naju-brown truncate">${item.name}</p>
+                                <p class="text-sm text-gray-500">KSh ${item.price.toLocaleString()}/${item.unit}</p>
+                                <p class="text-sm font-bold text-naju-green">KSh ${itemTotal.toLocaleString()}</p>
+                            </div>
+                            <div class="flex items-center gap-1 flex-shrink-0">
+                                <button onclick="updateQty(${item.id}, -1)" class="qty-btn bg-gray-200 hover:bg-gray-300 text-gray-700">−</button>
+                                <span class="w-8 text-center font-bold">${item.quantity}</span>
+                                <button onclick="updateQty(${item.id}, 1)" class="qty-btn bg-naju-green hover:bg-green-700 text-white">+</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+                document.getElementById('cart-total').textContent = 'KSh ' + total.toLocaleString();
+                footer.classList.remove('hidden');
+            }
+        }
+
+        function toggleCart(id, name, price, unit, image) {
+            let cart = getCart();
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                cart = cart.filter(item => item.id !== id);
+            } else {
+                cart.push({ id, name, price, unit, image, quantity: 1 });
+            }
+            saveCart(cart);
+            updateCartUI();
+            const btnText = document.getElementById('cart-btn-text-' + id);
+            if (btnText) {
+                const item = getCartItem(id);
+                btnText.textContent = item ? 'In Cart (' + item.quantity + ')' : 'Add';
+            }
+        }
+
+        function updateQty(id, delta) {
+            let cart = getCart();
+            const item = cart.find(i => i.id === id);
+            if (!item) return;
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== id);
+            }
+            saveCart(cart);
+            updateCartUI();
+            const btnText = document.getElementById('cart-btn-text-' + id);
+            if (btnText) {
+                const cartItem = getCartItem(id);
+                btnText.textContent = cartItem ? 'In Cart (' + cartItem.quantity + ')' : 'Add';
+            }
+        }
+
+        function clearCart() {
+            if (!confirm('Clear your cart?')) return;
+            saveCart([]);
+            updateCartUI();
+            document.querySelectorAll('[id^="cart-btn-text-"]').forEach(el => el.textContent = 'Add');
+        }
+
+        function openCart() { 
+            document.getElementById('cart-panel').classList.add('open');
+            document.getElementById('cart-overlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            document.getElementById('cart-panel').classList.remove('open');
+            document.getElementById('cart-overlay').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        // ===== Checkout =====
+        function toggleCheckoutMpesa(show) {
+            document.getElementById('checkout-mpesa-section').style.display = show ? '' : 'none';
+        }
+
+        function openCheckout() {
+            const cart = getCart();
+            if (cart.length === 0) { alert('Your cart is empty!'); return; }
+            let html = '', total = 0;
+            cart.forEach(item => {
+                const t = item.price * item.quantity;
+                total += t;
+                html += `<div class="flex justify-between"><span>${item.name} × ${item.quantity}</span><span>KSh ${t.toLocaleString()}</span></div>`;
+            });
+            document.getElementById('checkout-items').innerHTML = html;
+            document.getElementById('checkout-total').textContent = 'KSh ' + total.toLocaleString();
+            document.getElementById('checkout-modal').classList.remove('hidden');
+            toggleCheckoutMpesa(true);
+        }
+
+        function closeCheckout() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+            document.getElementById('checkout-form').reset();
+        }
+
+        document.getElementById('checkout-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            if (!sb) { alert('System unavailable. Please try again.'); return; }
+            const cart = getCart();
+            if (cart.length === 0) { alert('Your cart is empty!'); return; }
+
+            const btn = document.getElementById('checkout-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Placing order...';
+
+            try {
+                const total = cart.reduce((s, i) => s + i.price * i.quantity, 0);
+                const { error } = await sb.from('orders').insert({
+                    customer_name: document.getElementById('checkout-name').value,
+                    phone: document.getElementById('checkout-phone').value,
+                    address: document.getElementById('checkout-address').value,
+                    items: JSON.stringify(cart.map(i => ({ id: i.id, name: i.name, price: i.price, unit: i.unit, quantity: i.quantity }))),
+                    total: total,
+                    payment_method: document.querySelector('input[name="checkout-payment"]:checked').value,
+                    mpesa_code: document.getElementById('checkout-mpesa-code').value || null,
+                    notes: document.getElementById('checkout-notes').value || '',
+                    status: 'pending'
+                });
+                if (error) throw error;
+
+                saveCart([]);
+                updateCartUI();
+                closeCheckout();
+                alert('Order placed successfully! We will contact you shortly.\n\nTrack your order using your phone number.');
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Failed to place order. Please try again or contact us via WhatsApp.');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check mr-2"></i>Place Order';
+            }
+        });
+
+        function sendCartToWhatsApp() {
+            const cart = getCart();
+            if (cart.length === 0) { alert('Your cart is empty!'); return; }
+
+            let message = 'Hello Naju Poultry! 👋\n\nI would like to order:\n\n';
+            let total = 0;
+            cart.forEach((item, i) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                message += `${i + 1}. ${item.name} (${item.unit}) × ${item.quantity} = KSh ${itemTotal.toLocaleString()}\n`;
+            });
+            message += `\n━━━━━━━━━━━━━━━\n*Total: KSh ${total.toLocaleString()}*\n━━━━━━━━━━━━━━━\n\n`;
+            message += 'Please call me for delivery arrangements. 🙏';
+
+            const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Initialize cart UI on load
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCartUI();
+        });
+
+        // Update all cart button texts after products load
+        const origRender = renderProducts;
+        renderProducts = function(products) {
+            origRender(products);
+            setTimeout(() => {
+                const cart = getCart();
+                cart.forEach(item => {
+                    const btn = document.getElementById('cart-btn-text-' + item.id);
+                    if (btn) btn.textContent = 'In Cart (' + item.quantity + ')';
+                });
+            }, 100);
+        };
+
+        // Dark Mode Toggle
+        (function() {
+            const html = document.documentElement;
+            const stored = localStorage.getItem('naju_dark');
+            if (stored === 'true') html.classList.add('dark');
+
+            window.__darkToggle = function() {
+                const isDark = html.classList.toggle('dark');
+                localStorage.setItem('naju_dark', isDark);
+                const icon = isDark ? 'sun' : 'moon';
+                document.querySelectorAll('#dark-toggle i, #dark-toggle-mobile i').forEach(el => {
+                    el.className = 'fas ' + (icon === 'moon' ? 'fa-moon' : 'fa-sun');
+                });
+                document.querySelectorAll('#dark-toggle-mobile span').forEach(el => {
+                    el.textContent = icon === 'moon' ? 'Dark Mode' : 'Light Mode';
+                });
+            };
+
+            window.__initDark = function() {
+                const html = document.documentElement;
+                const icon = html.classList.contains('dark') ? 'sun' : 'moon';
+                document.querySelectorAll('#dark-toggle i, #dark-toggle-mobile i').forEach(el => {
+                    el.className = 'fas ' + (icon === 'moon' ? 'fa-moon' : 'fa-sun');
+                });
+                document.querySelectorAll('#dark-toggle-mobile span').forEach(el => {
+                    el.textContent = icon === 'moon' ? 'Dark Mode' : 'Light Mode';
+                });
+                document.querySelectorAll('#dark-toggle, #dark-toggle-mobile').forEach(btn => {
+                    btn.addEventListener('click', window.__darkToggle);
+                });
+            };
+        })();
+    </script>
+</body>
+</html>

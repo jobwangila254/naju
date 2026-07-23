@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script>navigator.serviceWorker?.getRegistrations().then(r=>r.forEach(s=>s.unregister()))</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Naju Poultry delivery service from Kwanza Ward, Trans Nzoia. Same-day delivery in Kitale & Eldoret, next-day to Nakuru & Nairobi. Free delivery for orders above KSh 10,000.">
+    <meta property="og:title" content="Delivery - Naju Poultry">
+    <meta property="og:description" content="Fast, reliable poultry delivery from Naju Poultry. Same-day in Kwanza, Kitale & Eldoret, next-day to Nakuru & Nairobi.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://naju-smoky.vercel.app/delivery.html">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/images/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Delivery - Naju Poultry">
+    <meta name="twitter:description" content="Naju Poultry delivery from Kwanza, Trans Nzoia. Same-day in Kitale & Eldoret, next-day to Nakuru & Nairobi.">
+    <link rel="canonical" href="https://naju-smoky.vercel.app/delivery.html">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Naju Poultry">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Delivery - Naju Poultry - Kwanza, Kenya</title>
+    <link href="css/tailwind.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="js/supabase.js"></script>
+</head>
+<body class="bg-naju-cream">
+    <!-- Skip to content -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-naju-green focus:text-white focus:px-4 focus:py-2 focus:rounded focus:font-bold">
+        Skip to main content
+    </a>
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50 transition-all duration-300" role="navigation" aria-label="Main navigation">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex-shrink-0 flex items-center group" aria-label="Naju Poultry Home">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2 transform transition-transform duration-300 group-hover:rotate-12"></i>
+                        <span class="font-bold text-xl text-naju-brown group-hover:text-naju-orange transition-colors duration-300">NAJU</span>
+                    </a>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-naju-brown hover:text-naju-orange font-medium">Home</a>
+                    <a href="products.html" class="text-naju-brown hover:text-naju-orange font-medium">Products</a>
+                    <a href="delivery.html" class="text-naju-orange font-medium">Delivery</a>
+                    <a href="about.html" class="text-naju-brown hover:text-naju-orange font-medium">About</a>
+                    <a href="contact.html" class="text-naju-brown hover:text-naju-orange font-medium">Contact</a>
+                    <a href="track.html" class="text-naju-brown hover:text-naju-orange font-medium">Track</a>
+                    <button id="dark-toggle" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 text-lg ml-2" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-naju-brown hover:text-naju-orange transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-naju-orange focus:ring-offset-2 rounded-lg p-2" aria-label="Toggle mobile menu" aria-expanded="false">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Home</a>
+                <a href="products.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Products</a>
+                <a href="delivery.html" class="block px-3 py-2 text-naju-orange font-medium">Delivery</a>
+                <a href="about.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">About</a>
+                <a href="contact.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Contact</a>
+                <a href="track.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Track</a>
+                <button id="dark-toggle-mobile" class="w-full text-left px-3 py-2 text-naju-brown hover:text-naju-orange font-medium flex items-center gap-2">
+                    <i class="fas fa-moon"></i> <span>Dark Mode</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section id="main-content" class="bg-gradient-to-r from-naju-green to-naju-brown text-white py-16" tabindex="-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Naju Delivery Service</h1>
+            <p class="text-xl text-naju-cream">Fast, reliable delivery to your doorstep</p>
+        </div>
+    </section>
+
+    <!-- Delivery Areas -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4">Delivery Areas</h2>
+                <p class="text-gray-600 text-lg">We deliver to these major cities and surrounding areas</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-6 bg-naju-cream rounded-lg">
+                    <div class="bg-naju-green text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-2">Kwanza / Kitale</h3>
+                    <p class="text-gray-600">Local delivery area</p>
+                    <p class="text-naju-green font-semibold">Same-day delivery</p>
+                </div>
+                <div class="text-center p-6 bg-naju-cream rounded-lg">
+                    <div class="bg-naju-orange text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-2">Eldoret</h3>
+                    <p class="text-gray-600">Town center & environs</p>
+                    <p class="text-naju-green font-semibold">Same-day delivery</p>
+                </div>
+                <div class="text-center p-6 bg-naju-cream rounded-lg">
+                    <div class="bg-naju-brown text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-2">Nakuru</h3>
+                    <p class="text-gray-600">Town center & outskirts</p>
+                    <p class="text-naju-green font-semibold">Next-day delivery</p>
+                </div>
+                <div class="text-center p-6 bg-naju-cream rounded-lg">
+                    <div class="bg-naju-green text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-2">Nairobi</h3>
+                    <p class="text-gray-600">All estates & suburbs</p>
+                    <p class="text-naju-green font-semibold">Next-day delivery</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Fees -->
+    <section class="py-16 bg-naju-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4">Delivery Fee Structure</h2>
+                <p class="text-gray-600 text-lg">Transparent pricing based on delivery zones</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">Zone 1</h3>
+                    <p class="text-gray-600 mb-4">Kwanza / Kitale</p>
+                    <p class="text-3xl font-bold text-naju-green">KSh 200</p>
+                    <p class="text-sm text-gray-500">per delivery</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">Zone 2</h3>
+                    <p class="text-gray-600 mb-4">Eldoret</p>
+                    <p class="text-3xl font-bold text-naju-green">KSh 500</p>
+                    <p class="text-sm text-gray-500">per delivery</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">Zone 3</h3>
+                    <p class="text-gray-600 mb-4">Nakuru</p>
+                    <p class="text-3xl font-bold text-naju-green">KSh 1,000</p>
+                    <p class="text-sm text-gray-500">per delivery</p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6 text-center">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">Zone 4</h3>
+                    <p class="text-gray-600 mb-4">Nairobi</p>
+                    <p class="text-3xl font-bold text-naju-green">KSh 1,500</p>
+                    <p class="text-sm text-gray-500">per delivery</p>
+                </div>
+            </div>
+            <div class="mt-8 text-center">
+                <p class="text-naju-orange font-semibold">Free delivery for orders above KSh 10,000!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Request Form -->
+    <section class="py-16 bg-white">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4">Request Delivery</h2>
+                <p class="text-gray-600 text-lg">Fill out the form below and we'll contact you within 2 hours</p>
+            </div>
+            
+            <form id="delivery-form" class="bg-naju-cream rounded-lg shadow-lg p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-naju-brown font-semibold mb-2">Full Name *</label>
+                        <input type="text" id="customerName" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold mb-2">Phone Number *</label>
+                        <input type="tel" id="phone" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-naju-brown font-semibold mb-2">Delivery Address *</label>
+                    <textarea id="address" rows="3" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent" placeholder="Describe your location (landmarks, building name, estate)"></textarea>
+                    <div class="mt-3 flex flex-wrap gap-3 items-center">
+                        <button type="button" id="share-location-btn" onclick="getLocation()"
+                                class="bg-naju-orange hover:bg-orange-500 text-white font-medium py-2 px-4 rounded-lg transition duration-300 text-sm flex items-center">
+                            <i class="fas fa-location-dot mr-2"></i>Share My Location
+                        </button>
+                        <span id="location-status" class="text-sm text-gray-500"></span>
+                    </div>
+                    <input type="hidden" id="latitude" value="">
+                    <input type="hidden" id="longitude" value="">
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-naju-brown font-semibold mb-2">Preferred Delivery Date *</label>
+                        <input type="date" id="preferredDate" required 
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                    </div>
+                    <div>
+                        <label class="block text-naju-brown font-semibold mb-2">Preferred Delivery Time *</label>
+                        <select id="preferredTime" required 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                            <option value="">Select time</option>
+                            <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
+                            <option value="Afternoon (12PM - 4PM)">Afternoon (12PM - 4PM)</option>
+                            <option value="Evening (4PM - 7PM)">Evening (4PM - 7PM)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-naju-brown font-semibold mb-2">Product Interest *</label>
+                    <select id="productInterest" required 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        <option value="">Select product category</option>
+                        <option value="Eggs">Eggs</option>
+                        <option value="Chicks">Chicks</option>
+                        <option value="Live Chicken">Live Chicken</option>
+                        <option value="Dressed Chicken">Dressed Chicken</option>
+                        <option value="Feed">Feed</option>
+                        <option value="Multiple Products">Multiple Products</option>
+                    </select>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-naju-brown font-semibold mb-2">Additional Notes (Optional)</label>
+                    <textarea id="notes" rows="3" 
+                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent"
+                              placeholder="Any special instructions or requirements..."></textarea>
+                </div>
+
+                <!-- Payment Method -->
+                <div class="mb-6 p-4 bg-white rounded-lg border border-gray-200">
+                    <label class="block text-naju-brown font-bold mb-3 text-lg">
+                        <i class="fas fa-money-bill-wave mr-2 text-naju-green"></i>Payment Method
+                    </label>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-3">
+                        <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 flex-1 transition-colors" onclick="document.getElementById('pay-mpesa').checked = true; toggleMpesa(true)">
+                            <input type="radio" name="payment_method" id="pay-mpesa" value="mpesa" class="accent-naju-green">
+                            <i class="fab fa-google-wallet text-2xl text-green-600"></i>
+                            <div>
+                                <span class="font-semibold">M-Pesa</span>
+                                <p class="text-xs text-gray-500">Pay now via M-Pesa</p>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 flex-1 transition-colors" onclick="document.getElementById('pay-cash').checked = true; toggleMpesa(false)">
+                            <input type="radio" name="payment_method" id="pay-cash" value="cash" checked class="accent-naju-green">
+                            <i class="fas fa-hand-holding-usd text-2xl text-naju-orange"></i>
+                            <div>
+                                <span class="font-semibold">Pay on Delivery</span>
+                                <p class="text-xs text-gray-500">Cash or M-Pesa on arrival</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div id="mpesa-details" class="hidden bg-green-50 border border-green-200 rounded-lg p-4">
+                        <div class="flex items-start gap-3 mb-3">
+                            <i class="fas fa-mobile-alt text-2xl text-green-600 mt-1"></i>
+                            <div>
+                                <p class="font-bold text-green-800">Lipa na M-Pesa</p>
+                                <p class="text-sm text-green-700">Pay to Till Number: <span class="font-bold text-lg">123456</span></p>
+                                <p class="text-sm text-green-700">Business: Naju Poultry</p>
+                                <p class="text-xs text-green-600 mt-1">Send the amount via M-Pesa → Lipa na M-Pesa → Paybill/Till</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-green-800 mb-1">M-Pesa Transaction Code</label>
+                            <input type="text" id="mpesa-code" placeholder="e.g., PLL1Q2W3E4"
+                                   class="w-full px-4 py-2 border border-green-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none">
+                            <p class="text-xs text-green-600 mt-1">Enter the M-Pesa confirmation code you received via SMS</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" 
+                        class="w-full bg-naju-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                    <i class="fas fa-truck mr-2"></i>Submit Delivery Request
+                </button>
+            </form>
+            
+            <div id="success-message" class="hidden mt-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                <i class="fas fa-check-circle mr-2"></i>
+                Your delivery request has been submitted successfully! We'll contact you within 2 hours.
+            </div>
+            
+            <div id="error-message" class="hidden mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                There was an error submitting your request. Please try again or contact us directly.
+            </div>
+        </div>
+    </section>
+
+    <!-- Delivery Info -->
+    <section class="py-16 bg-naju-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <h3 class="text-2xl font-bold text-naju-brown mb-6 text-center">Important Delivery Information</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold text-lg text-naju-green mb-3">
+                            <i class="fas fa-clock mr-2"></i>Delivery Times
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• Monday - Friday: 8:00 AM - 7:00 PM</li>
+                            <li>• Saturday: 8:00 AM - 7:00 PM</li>
+                            <li>• Sunday: 9:00 AM - 2:00 PM</li>
+                            <li>• Same-day delivery in Kwanza, Kitale & Eldoret for orders before 12 PM</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-naju-orange mb-3">
+                            <i class="fas fa-info-circle mr-2"></i>Delivery Notes
+                        </h4>
+                        <ul class="space-y-2 text-gray-600">
+                            <li>• Our team will contact you within 2 hours</li>
+                            <li>• Payment on delivery available</li>
+                            <li>• Live animals delivered in special cages</li>
+                            <li>• All products are fresh and quality-checked</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-naju-brown text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">NAJU</span>
+                    </div>
+                    <p class="text-naju-cream">Fresh from our farm to your table</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="products.html" class="text-naju-cream hover:text-white">Products</a></li>
+                        <li><a href="delivery.html" class="text-naju-cream hover:text-white">Delivery</a></li>
+                        <li><a href="about.html" class="text-naju-cream hover:text-white">About Us</a></li>
+                        <li><a href="contact.html" class="text-naju-cream hover:text-white">Contact</a></li>
+                        <li><a href="track.html" class="text-naju-cream hover:text-white">Track Order</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li><i class="fas fa-phone mr-2"></i>+254 724442020</li>
+                        <li><i class="fab fa-whatsapp mr-2"></i>+254 724 442 020</li>
+                        <li><i class="fas fa-envelope mr-2"></i>najupoultry@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Business Hours</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li>24/7 - Always Available</li>
+                        <li>Emergency Orders Welcome</li>
+                        <li>Fast Response Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-naju-orange mt-8 pt-8 text-center text-naju-cream">
+                <p>&copy; 2026 Naju Poultry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Supabase Configuration -->
+    <script>
+        // Supabase initialization
+        let sb = null;
+        try {
+            sb = initSupabase();
+        } catch (error) {
+            console.error('Naju Poultry: Supabase initialization failed:', error);
+        }
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                mobileMenu.classList.toggle('hidden');
+                this.setAttribute('aria-expanded', !isExpanded);
+                const icon = this.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fa-bars');
+                    icon.classList.toggle('fa-times');
+                }
+            });
+            document.addEventListener('click', function(event) {
+                if (!menuBtn.contains(event.target) && !mobileMenu.contains(event.target)) {
+                    mobileMenu.classList.add('hidden');
+                    menuBtn.setAttribute('aria-expanded', 'false');
+                    const icon = menuBtn.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('fa-bars');
+                        icon.classList.remove('fa-times');
+                    }
+                }
+            });
+        }
+
+        // Share location via Geolocation API
+        function getLocation() {
+            const status = document.getElementById('location-status');
+            const btn = document.getElementById('share-location-btn');
+            if (!navigator.geolocation) {
+                status.textContent = 'Geolocation not supported by your browser';
+                status.classList.add('text-red-500');
+                return;
+            }
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Getting location...';
+            status.textContent = 'Getting your location...';
+            status.classList.remove('text-red-500', 'text-green-600');
+            status.classList.add('text-gray-500');
+            navigator.geolocation.getCurrentPosition(
+                function(pos) {
+                    const lat = pos.coords.latitude.toFixed(6);
+                    const lng = pos.coords.longitude.toFixed(6);
+                    document.getElementById('latitude').value = lat;
+                    document.getElementById('longitude').value = lng;
+                    const mapsUrl = `https://maps.google.com/?q=${lat},${lng}`;
+                    status.innerHTML = `Location shared! <a href="${mapsUrl}" target="_blank" class="text-naju-green underline font-semibold">View on map</a>`;
+                    status.classList.remove('text-gray-500');
+                    status.classList.add('text-green-600');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-location-dot mr-2"></i>Update Location';
+                },
+                function(err) {
+                    let msg = 'Could not get your location. ';
+                    switch(err.code) {
+                        case err.PERMISSION_DENIED: msg += 'Please allow location access in your browser settings.'; break;
+                        case err.POSITION_UNAVAILABLE: msg += 'Location information unavailable.'; break;
+                        case err.TIMEOUT: msg += 'Request timed out. Try again.'; break;
+                        default: msg += 'An error occurred.'; break;
+                    }
+                    status.textContent = msg;
+                    status.classList.remove('text-gray-500');
+                    status.classList.add('text-red-500');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-location-dot mr-2"></i>Share My Location';
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        function toggleMpesa(show) {
+            document.getElementById('mpesa-details').classList.toggle('hidden', !show);
+        }
+
+        // Set minimum date to today
+        document.getElementById('preferredDate').min = new Date().toISOString().split('T')[0];
+
+        // Handle form submission
+        document.getElementById('delivery-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const lat = document.getElementById('latitude').value;
+            const lng = document.getElementById('longitude').value;
+            const locationLink = lat && lng ? `https://maps.google.com/?q=${lat},${lng}` : '';
+
+            const paymentMethod = document.querySelector('input[name="payment_method"]:checked')?.value || 'cash';
+            const mpesaCode = document.getElementById('mpesa-code').value.trim();
+
+            const formData = {
+                customerName: document.getElementById('customerName').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                preferredDate: document.getElementById('preferredDate').value,
+                preferredTime: document.getElementById('preferredTime').value,
+                productInterest: document.getElementById('productInterest').value,
+                notes: document.getElementById('notes').value,
+                latitude: lat || null,
+                longitude: lng || null,
+                location_link: locationLink || null,
+                payment_method: paymentMethod,
+                mpesa_code: mpesaCode || null,
+                status: 'pending',
+                created_at: new Date().toISOString()
+            };
+
+            try {
+                if (sb) {
+                    const { error } = await sb
+                        .from('delivery_requests')
+                        .insert(toSnakeCase(formData));
+                    
+                    if (error) throw error;
+                }
+                
+                // Show success message
+                document.getElementById('success-message').classList.remove('hidden');
+                document.getElementById('error-message').classList.add('hidden');
+                
+                // Reset form
+                document.getElementById('delivery-form').reset();
+                document.getElementById('latitude').value = '';
+                document.getElementById('longitude').value = '';
+                document.getElementById('location-status').textContent = '';
+                document.getElementById('location-status').className = 'text-sm text-gray-500';
+                const locBtn = document.getElementById('share-location-btn');
+                if (locBtn) {
+                    locBtn.disabled = false;
+                    locBtn.innerHTML = '<i class="fas fa-location-dot mr-2"></i>Share My Location';
+                }
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('success-message').classList.add('hidden');
+                }, 5000);
+                
+            } catch (error) {
+                console.error('Error submitting delivery request:', error);
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('success-message').classList.add('hidden');
+            }
+        });
+
+        // Dark Mode Toggle
+        (function() {
+            const html = document.documentElement;
+            const stored = localStorage.getItem('naju_dark');
+            if (stored === 'true') html.classList.add('dark');
+
+            function setIcon(icon) {
+                document.querySelectorAll('#dark-toggle i, #dark-toggle-mobile i').forEach(el => {
+                    el.className = 'fas ' + (icon === 'moon' ? 'fa-moon' : 'fa-sun');
+                });
+                document.querySelectorAll('#dark-toggle-mobile span').forEach(el => {
+                    el.textContent = icon === 'moon' ? 'Dark Mode' : 'Light Mode';
+                });
+            }
+
+            function toggle() {
+                const isDark = html.classList.toggle('dark');
+                localStorage.setItem('naju_dark', isDark);
+                setIcon(isDark ? 'sun' : 'moon');
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                setIcon(html.classList.contains('dark') ? 'sun' : 'moon');
+                const btns = document.querySelectorAll('#dark-toggle, #dark-toggle-mobile');
+                btns.forEach(btn => btn.addEventListener('click', toggle));
+            });
+        })();
+    </script>
+</body>
+</html>

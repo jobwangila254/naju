@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Naju Poultry - Kwanza, Kenya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'naju-brown': '#8B4513',
+                        'naju-orange': '#F4A460',
+                        'naju-green': '#2E7D32',
+                        'naju-cream': '#FFF8E7'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-naju-cream">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2"></i>
+                        <span class="font-bold text-xl text-naju-brown">NAJU</span>
+                    </div>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html" class="text-naju-brown hover:text-naju-orange font-medium">Home</a>
+                    <a href="products.html" class="text-naju-brown hover:text-naju-orange font-medium">Products</a>
+                    <a href="delivery.html" class="text-naju-brown hover:text-naju-orange font-medium">Delivery</a>
+                    <a href="about.html" class="text-naju-brown hover:text-naju-orange font-medium">About</a>
+                    <a href="contact.html" class="text-naju-orange font-medium">Contact</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-naju-brown hover:text-naju-orange">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Home</a>
+                <a href="products.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Products</a>
+                <a href="delivery.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">Delivery</a>
+                <a href="about.html" class="block px-3 py-2 text-naju-brown hover:text-naju-orange font-medium">About</a>
+                <a href="contact.html" class="block px-3 py-2 text-naju-orange font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="bg-gradient-to-r from-naju-green to-naju-brown text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
+            <p class="text-xl text-naju-cream">Get in touch with Naju Poultry</p>
+        </div>
+    </section>
+
+    <!-- Contact Info Cards -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6 bg-naju-cream rounded-lg">
+                    <div class="bg-naju-green text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-phone text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-2">Phone</h3>
+                    <p class="text-gray-600 mb-4">Call us for immediate assistance</p>
+                    <a href="tel:+254724442020" class="text-naju-green font-semibold hover:text-green-700">
+                        0724 442 020
+                    </a>
+                </div>
+                
+                <div class="text-center p-6 bg-naju-cream rounded-lg">
+                    <div class="bg-naju-orange text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fab fa-whatsapp text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-2">WhatsApp</h3>
+                    <p class="text-gray-600 mb-4">Chat with us on WhatsApp</p>
+                    <a href="https://wa.me/254724442020" target="_blank" class="text-naju-green font-semibold hover:text-green-700">
+                        0724 442 020
+                    </a>
+                </div>
+                
+                <div class="text-center p-6 bg-naju-cream rounded-lg">
+                    <div class="bg-naju-brown text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-naju-brown mb-2">Email</h3>
+                    <p class="text-gray-600 mb-4">Send us an email</p>
+                    <a href="mailto:najupoultry@gmail.com" class="text-naju-green font-semibold hover:text-green-700">
+                        najupoultry@gmail.com
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Form & Address -->
+    <section class="py-16 bg-naju-cream">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Contact Form -->
+                <div>
+                    <h2 class="text-3xl font-bold text-naju-brown mb-6">Send us a Message</h2>
+                    <form id="contact-form" class="bg-white rounded-lg shadow-lg p-8">
+                        <div class="mb-6">
+                            <label class="block text-naju-brown font-semibold mb-2">Full Name *</label>
+                            <input type="text" id="name" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-naju-brown font-semibold mb-2">Email Address *</label>
+                            <input type="email" id="email" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-naju-brown font-semibold mb-2">Phone Number *</label>
+                            <input type="tel" id="phone" required 
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent">
+                        </div>
+                        
+                        <div class="mb-6">
+                            <label class="block text-naju-brown font-semibold mb-2">Message *</label>
+                            <textarea id="message" rows="5" required 
+                                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-naju-green focus:border-transparent"
+                                      placeholder="Tell us how we can help you..."></textarea>
+                        </div>
+                        
+                        <button type="submit" 
+                                class="w-full bg-naju-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                            <i class="fas fa-paper-plane mr-2"></i>Send Message
+                        </button>
+                    </form>
+                    
+                    <div id="success-message" class="hidden mt-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
+                        <i class="fas fa-check-circle mr-2"></i>
+                        Your message has been sent successfully! We'll get back to you soon.
+                    </div>
+                    
+                    <div id="error-message" class="hidden mt-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        There was an error sending your message. Please try again.
+                    </div>
+                </div>
+                
+                <!-- Address & Business Hours -->
+                <div>
+                    <h2 class="text-3xl font-bold text-naju-brown mb-6">Visit Our Farm</h2>
+                    
+                    <div class="bg-white rounded-lg shadow-lg p-8 mb-6">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">
+                            <i class="fas fa-map-marker-alt text-naju-orange mr-2"></i>Farm Address
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Naju Poultry Farm<br>
+                            Kwanza Sub-location<br>
+                            Along Kitale-Webuye Road<br>
+                            Trans Nzoia County, Kenya
+                        </p>
+                        <a href="https://maps.google.com" target="_blank" class="text-naju-green font-semibold hover:text-green-700">
+                            <i class="fas fa-directions mr-2"></i>Get Directions
+                        </a>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-lg p-8">
+                        <h3 class="text-xl font-bold text-naju-brown mb-4">
+                            <i class="fas fa-clock text-naju-orange mr-2"></i>Business Hours
+                        </h3>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Service Availability</span>
+                                <span class="font-semibold text-naju-green">24/7 - Always Open</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Emergency Orders</span>
+                                <span class="font-semibold text-naju-orange">Available Anytime</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Response Time</span>
+                                <span class="font-semibold text-naju-green">Fast & Reliable</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-naju-cream rounded-lg">
+                            <p class="text-sm text-gray-600">
+                                <i class="fas fa-info-circle text-naju-orange mr-2"></i>
+                                <strong>Always Available:</strong> We're here for you 24/7! Whether you need fresh poultry products at midnight or early morning, we're ready to serve you. Call or WhatsApp anytime for immediate assistance.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Contact -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-naju-green to-naju-brown rounded-lg p-8 text-center text-white">
+                <h2 class="text-3xl font-bold mb-4">Quick Order Hotline</h2>
+                <p class="text-xl mb-6">Need to place an order quickly? Call us now!</p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="tel:+254724442020" class="bg-white hover:bg-gray-100 text-naju-brown font-bold py-3 px-8 rounded-full transition duration-300">
+                        <i class="fas fa-phone mr-2"></i>Call Now
+                    </a>
+                    <a href="https://wa.me/254724442020" target="_blank" class="bg-naju-orange hover:bg-orange-500 text-white font-bold py-3 px-8 rounded-full transition duration-300">
+                        <i class="fab fa-whatsapp mr-2"></i>WhatsApp Order
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-naju-cream">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-naju-brown mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600 text-lg">Quick answers to common questions</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">
+                        <i class="fas fa-question-circle text-naju-orange mr-2"></i>
+                        Do you deliver to my area?
+                    </h3>
+                    <p class="text-gray-600">We currently deliver to Lagos, Ibadan, Abeokuta, and surrounding areas. Contact us to confirm delivery to your specific location.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">
+                        <i class="fas fa-question-circle text-naju-orange mr-2"></i>
+                        How fresh are your products?
+                    </h3>
+                    <p class="text-gray-600">All our products are farm-fresh. Eggs are collected daily, and chickens are processed to order to ensure maximum freshness.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">
+                        <i class="fas fa-question-circle text-naju-orange mr-2"></i>
+                        What payment methods do you accept?
+                    </h3>
+                    <p class="text-gray-600">We accept cash on delivery, bank transfers, and mobile payments. Payment details are provided when you place your order.</p>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="font-bold text-lg text-naju-brown mb-2">
+                        <i class="fas fa-question-circle text-naju-orange mr-2"></i>
+                        Can I visit the farm?
+                    </h3>
+                    <p class="text-gray-600">Yes! We welcome farm visits during business hours. Please call ahead to schedule your visit and ensure someone is available to show you around.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-naju-brown text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-egg text-naju-orange text-2xl mr-2"></i>
+                        <span class="font-bold text-xl">NAJU</span>
+                    </div>
+                    <p class="text-naju-cream">Fresh from our farm to your table</p>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="products.html" class="text-naju-cream hover:text-white">Products</a></li>
+                        <li><a href="delivery.html" class="text-naju-cream hover:text-white">Delivery</a></li>
+                        <li><a href="about.html" class="text-naju-cream hover:text-white">About Us</a></li>
+                        <li><a href="contact.html" class="text-naju-cream hover:text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Contact Info</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li><i class="fas fa-phone mr-2"></i>0724 442 020</li>
+                        <li><i class="fab fa-whatsapp mr-2"></i>0724 442 020</li>
+                        <li><i class="fas fa-envelope mr-2"></i>najupoultry@gmail.com</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold mb-4">Business Hours</h4>
+                    <ul class="space-y-2 text-naju-cream">
+                        <li>24/7 - Always Available</li>
+                        <li>Emergency Orders Welcome</li>
+                        <li>Fast Response Guaranteed</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-naju-orange mt-8 pt-8 text-center text-naju-cream">
+                <p>&copy; 2026 Naju Poultry. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase Configuration -->
+    <script>
+        // Firebase configuration - Replace with your actual config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "najupoultry-kenya.firebaseapp.com",
+            projectId: "najupoultry-kenya",
+            storageBucket: "najupoultry-kenya.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Handle contact form submission
+        document.getElementById('contact-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                message: document.getElementById('message').value,
+                status: 'new',
+                createdAt: new Date().toISOString()
+            };
+
+            try {
+                await db.collection('contactMessages').add(formData);
+                
+                // Show success message
+                document.getElementById('success-message').classList.remove('hidden');
+                document.getElementById('error-message').classList.add('hidden');
+                
+                // Reset form
+                document.getElementById('contact-form').reset();
+                
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    document.getElementById('success-message').classList.add('hidden');
+                }, 5000);
+                
+            } catch (error) {
+                console.error('Error submitting contact form:', error);
+                document.getElementById('error-message').classList.remove('hidden');
+                document.getElementById('success-message').classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
