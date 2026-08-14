@@ -1,6 +1,21 @@
 # Naju Poultry Website
 
+![Website](https://img.shields.io/website?url=https%3A%2F%2Fnaju-smoky.vercel.app&label=website)
+![Built with HTML5](https://img.shields.io/badge/built%20with-HTML5-E34F26?logo=html5&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?logo=tailwindcss&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?logo=firebase&logoColor=black)
+![PWA](https://img.shields.io/badge/PWA-5A0FC8?logo=pwa&logoColor=white)
+
 A lightweight, fast-loading website for Naju Poultry built with HTML5, TailwindCSS, and Firebase.
+
+## 🚀 Live Demo
+
+Visit the live site: [https://naju-smoky.vercel.app](https://naju-smoky.vercel.app)
+
+## 📸 Screenshots
+
+![Naju Poultry - og-image](og-image.jpg)
 
 ## 🚀 Features
 
@@ -186,6 +201,7 @@ const ADMIN_PASSWORD = 'naju123';
 ## 🔒 Security Notes
 
 - Admin panel uses simple session-based authentication
+- The default admin credentials (`admin` / `naju123`) are **development-only** — do not ship them to production. Replace them with a proper authentication solution before going live.
 - Consider implementing proper Firebase Authentication for production
 - Validate all user inputs on the backend
 - Use HTTPS in production
@@ -231,3 +247,9 @@ The website is designed to be easily maintainable:
 ---
 
 **Built with ❤️ for Naju Poultry**
+
+## 📄 License
+
+Proprietary. All rights reserved.
+
+Copyright © 2026 Naju Poultry. This repository and its contents are the exclusive property of Naju Poultry. You may not copy, modify, distribute, sublicense, or use any part of this code without prior written permission.

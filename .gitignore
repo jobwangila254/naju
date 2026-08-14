@@ -3,3 +3,6 @@
 .DS_Store
 *.log
 node_modules/
+/naju-main/
+/server.py
+/start.sh

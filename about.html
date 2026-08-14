@@ -3,6 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Learn about Naju Poultry's story, mission, and values - a trusted farm delivering fresh eggs, chicks, and chicken across Kwanza, Kenya.">
+    <meta name="keywords" content="about naju poultry, poultry farm kwanza, kienyeji farm kenya, eggs, chicks, chicken">
+    <meta name="author" content="Naju Poultry">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta property="og:title" content="About Us - Naju Poultry">
+    <meta property="og:description" content="Learn about Naju Poultry's story, mission, and values - a trusted farm delivering fresh eggs, chicks, and chicken across Kwanza, Kenya.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://naju-smoky.vercel.app/about.html">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/og-image.jpg">
+    <meta property="og:site_name" content="Naju Poultry">
+    <meta property="og:locale" content="en_KE">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="About Us - Naju Poultry">
+    <meta name="twitter:description" content="Learn about Naju Poultry's story, mission, and values - a trusted farm delivering fresh eggs, chicks, and chicken across Kwanza, Kenya.">
+    <meta name="twitter:image" content="https://naju-smoky.vercel.app/og-image.jpg">
+    <link rel="canonical" href="https://naju-smoky.vercel.app/about.html">
     <title>About Us - Naju Poultry - Kwanza, Kenya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -236,6 +253,19 @@
             const menu = document.getElementById('mobile-menu');
             menu.classList.toggle('hidden');
         });
+    <script>
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Naju Poultry: SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('Naju Poultry: SW registration failed: ', registrationError);
+                    });
+            });
+        }
     </script>
 </body>
 </html>

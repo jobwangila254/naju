@@ -6,12 +6,20 @@
     <meta name="description" content="Browse our complete range of fresh poultry products - eggs, chicks, live chicken, dressed chicken, and feed. Quality products from Naju Poultry in Kwanza, Kenya.">
     <meta name="keywords" content="poultry products, eggs, chicks, chicken, kienyeji, broiler, feed, kwanza, kenya, naju poultry">
     <meta name="author" content="Naju Poultry">
+    <meta name="robots" content="index, follow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <meta property="og:title" content="Products - Naju Poultry">
-    <meta property="og:description" content="Browse our complete range of fresh poultry products">
+    <meta property="og:description" content="Browse our complete range of fresh poultry products - eggs, chicks, live chicken, dressed chicken, and feed in Kwanza, Kenya.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://najupoultry.co.ke/products.html">
-    <meta property="og:image" content="https://najupoultry.co.ke/images/products-og.jpg">
-    <link rel="canonical" href="https://najupoultry.co.ke/products.html">
+    <meta property="og:url" content="https://naju-smoky.vercel.app/products.html">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/og-image.jpg">
+    <meta property="og:site_name" content="Naju Poultry">
+    <meta property="og:locale" content="en_KE">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Products - Naju Poultry">
+    <meta name="twitter:description" content="Browse our complete range of fresh poultry products - eggs, chicks, live chicken, dressed chicken, and feed.">
+    <meta name="twitter:image" content="https://naju-smoky.vercel.app/og-image.jpg">
+    <link rel="canonical" href="https://naju-smoky.vercel.app/products.html">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://www.gstatic.com">
@@ -583,6 +591,19 @@
                 observer.observe(section);
             });
         });
+    <script>
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Naju Poultry: SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('Naju Poultry: SW registration failed: ', registrationError);
+                    });
+            });
+        }
     </script>
 </body>
 </html>

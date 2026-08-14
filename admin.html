@@ -3,6 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin panel for managing Naju Poultry products, delivery requests, and customer messages. Authorized personnel only.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta property="og:title" content="Admin Panel - Naju Poultry">
+    <meta property="og:description" content="Admin panel for managing Naju Poultry products, delivery requests, and customer messages.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://naju-smoky.vercel.app/admin.html">
+    <meta property="og:image" content="https://naju-smoky.vercel.app/og-image.jpg">
+    <meta property="og:site_name" content="Naju Poultry">
+    <meta property="og:locale" content="en_KE">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Admin Panel - Naju Poultry">
+    <meta name="twitter:description" content="Admin panel for managing Naju Poultry products, delivery requests, and customer messages.">
+    <meta name="twitter:image" content="https://naju-smoky.vercel.app/og-image.jpg">
+    <link rel="canonical" href="https://naju-smoky.vercel.app/admin.html">
     <title>Admin Panel - Naju Poultry - Kwanza, Kenya</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -633,6 +648,19 @@
         // Edit product (simplified - just reload for now)
         function editProduct(id) {
             alert('Edit functionality would open a modal with pre-filled form data. For simplicity, please delete and recreate the product.');
+        }
+    <script>
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Naju Poultry: SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('Naju Poultry: SW registration failed: ', registrationError);
+                    });
+            });
         }
     </script>
 </body>
